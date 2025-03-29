@@ -9,6 +9,7 @@
         "paths": {
             "@pages/*": ["./src/pages/*"],
             "@components/*": ["./src/components/*"],
+            "@styles/*": ["./src/styles/*"],
             "@interfaces/*": ["./src/interfaces/*"],
             "@services/*": ["./src/services/*"],
             "@store/*": ["./src/store/*"],

@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.icon {
+    color: white;
+    position: absolute;
+    right: 25px;
+    top: 20px;
+    cursor: pointer;
+}
