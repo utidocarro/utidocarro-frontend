@@ -2,13 +2,13 @@ import { HTMLProps, memo } from 'react';
 import style from './style.module.css';
 
 export interface ILabel extends HTMLProps<HTMLLabelElement> {
-    label: string;
+    text: string;
 }
 
-function Label({ label, ...props }: ILabel) {
+function Label({ text, ...props }: ILabel) {
     return (
         <label className={style.label} {...props}>
-            {label}
+            {text}
         </label>
     );
 }

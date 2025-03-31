@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    gap: 10px;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    appearance: none;
+    border: 1px solid var(--white);
+    border-radius: 2px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.checkbox:checked {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.checkbox:checked::after {
+    content: '✔';
+    color: var(--white);
+    font-size: 14px;
+    font-weight: bold;
+}
