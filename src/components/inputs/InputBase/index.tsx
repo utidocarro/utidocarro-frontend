@@ -1,18 +1,14 @@
 import { memo } from 'react';
 import Input, { IInput } from '../Input';
 import style from './style.module.css';
-import { Colors } from '@styles/Colors';
+import Label, { ILabel } from '@components/texts/Label';
 
-export interface IInputBase extends IInput {
-    label: string;
-}
+export interface IInputBase extends IInput, Pick<ILabel, 'label'> {}
 
 function InputBase({ label, ...props }: IInputBase) {
     return (
         <div className={style.container}>
-            <label className={style.label} style={{ color: Colors.white }}>
-                {label}
-            </label>
+            <Label label={label} />
 
             <Input {...props} />
         </div>

@@ -1,0 +1,12 @@
+.subtitle {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.primary {
+    color: var(--shape);
+}
+
+.secondary {
+    color: var(--white);
+}

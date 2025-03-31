@@ -10,6 +10,15 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    --white: #ffffff;
+    --light-text: #777979;
+    --shape: #292c2d;
+    --light-shape: #3d4142;
+    --background: #0b1621;
+    --green: #008f39;
+    --warning: #ffc72c;
+    --error: #e70000;
 }
 
 html,
