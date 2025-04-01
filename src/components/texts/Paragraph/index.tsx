@@ -13,6 +13,9 @@ export interface IParagraph {
 export const EColors = {
     white: Colors.white,
     black: Colors.shape,
+    green: Colors.green,
+    yellow: Colors.warning,
+    red: Colors.error,
 } as const;
 
 export enum EWeights {

@@ -7,6 +7,7 @@ export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 function Input({ ...props }: IInput) {
+    console.log('Input renderizou!', props.placeholder);
     return (
         <input
             {...props}

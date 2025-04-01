@@ -3,8 +3,8 @@ import style from './style.module.css';
 
 export interface ICard extends HTMLProps<HTMLDivElement> {
     cardType?: keyof typeof EType;
-    height: string;
-    width: string;
+    height?: string;
+    width?: string;
 }
 
 export enum EType {
