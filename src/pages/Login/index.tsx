@@ -33,6 +33,7 @@ function Login() {
     } = useForm<ILoginFormFields>({ resolver: zodResolver(schema) });
 
     const onSubmit: SubmitHandler<ILoginFormFields> = async (data) => {
+        // TODO: Implementar a lógica de login
         await new Promise((resolve) => setTimeout(resolve, 2000));
         console.log('data: ', data);
         reset();

@@ -1,17 +1,17 @@
 import Card, { ICard } from '@components/cards/Card';
-import { memo } from 'react';
+import { HTMLProps, memo } from 'react';
 import style from './style.module.css';
 
-export interface IButton extends Partial<ICard> {
-    onClick?: () => void;
+export interface IButton
+    extends Pick<ICard, 'cardType'>,
+        HTMLProps<HTMLButtonElement> {
+    type?: 'button' | 'submit' | 'reset';
 }
 
-function Button({ onClick, children, ...props }: IButton) {
+function Button({ onClick, children, cardType, ...props }: IButton) {
     return (
-        <button onClick={onClick} className={style.container}>
-            <Card cardType="secondary" {...props}>
-                {children}
-            </Card>
+        <button className={style.container} {...props}>
+            <Card cardType="secondary">{children}</Card>
         </button>
     );
 }
