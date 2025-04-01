@@ -1,21 +1,21 @@
 .container {
-    padding: 12px;
-    border-radius: 10px;
+  padding: 12px;
+  border-radius: 10px;
 }
 
 .primary {
-    background-color: var(--light-shape);
+  background-color: var(--light-shape);
 }
 
 .secondary {
-    background-color: var(--white);
+  background-color: var(--white);
 }
 
 .transparent {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .opacity {
-    background-color: var(--light-shape);
-    opacity: 0.8;
+  background-color: var(--shape);
+  opacity: 0.8;
 }
