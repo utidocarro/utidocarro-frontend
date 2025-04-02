@@ -8,10 +8,15 @@ export interface IButton
     type?: 'button' | 'submit' | 'reset';
 }
 
-function Button({ onClick, children, cardType, ...props }: IButton) {
+function Button({
+    onClick,
+    children,
+    cardType = 'secondary',
+    ...props
+}: IButton) {
     return (
         <button className={style.container} {...props}>
-            <Card cardType="secondary">{children}</Card>
+            <Card cardType={cardType}>{children}</Card>
         </button>
     );
 }
