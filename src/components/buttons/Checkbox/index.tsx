@@ -1,6 +1,7 @@
 import { HTMLProps, memo } from "react";
-import style from "./style.module.css";
+
 import Label, { ILabel } from "@components/texts/Label";
+import style from "./style.module.css";
 
 export interface ICheckbox
   extends HTMLProps<HTMLInputElement>,

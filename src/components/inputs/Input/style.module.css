@@ -1,6 +1,7 @@
 .input {
-    padding: 20px 25px;
-    border-radius: 10px;
-    font-weight: normal;
-    font-size: 18px;
+  padding: 20px 25px;
+  border-radius: 10px;
+  font-weight: normal;
+  font-size: 18px;
+  border: none;
 }
