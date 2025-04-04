@@ -1,4 +1,5 @@
-import Eye from './Eye';
-import EyeHide from './EyeHide';
+import Eye from "./Eye";
+import EyeHide from "./EyeHide";
+import People from "./People";
 
-export { Eye, EyeHide };
+export { Eye, EyeHide, People };

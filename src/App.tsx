@@ -1,20 +1,12 @@
-import Circle from '@components/icons/Circle';
-import style from './style.module.css';
-import Login from '@pages/Login';
-import { Colors } from '@styles/Colors';
-import MenuCard from '@components/cards/MenuCard';
+import style from "./style.module.css";
+import Login from "@pages/Login";
 
 function App() {
-    return (
-        <div className={style.container}>
-            {/* <Login /> */}
-            <MenuCard
-                isSelected={false}
-                icon={<>Hello World</>}
-                text="Cacilda"
-            />
-        </div>
-    );
+  return (
+    <div className={style.container}>
+      <Login />
+    </div>
+  );
 }
 
 export default App;
