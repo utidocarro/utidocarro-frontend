@@ -48,7 +48,7 @@ function Login() {
             }
         } catch (error: ApiResponseError | unknown) {
             const errorMessage =
-                (error as ApiResponseError)?.error || 'Erro desconhecido';
+                (error as ApiResponseError)?.error || 'Servidor indisponível no momento!';
             toast.error(`Erro ao fazer login: ${errorMessage}`);
         }
     };
