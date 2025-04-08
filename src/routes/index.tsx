@@ -8,17 +8,21 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route
+        path="/"
+        element={<Navigate to={isLogged ? "/home" : "/login"} replace />}
+      />
+
+      <Route
+        path="/login"
+        element={isLogged ? <Navigate to="/home" replace /> : <Login />}
+      />
+      <Route
         path="/home"
         element={
           <PrivateRoute>
             <div style={{ color: "white" }}>Home</div>
           </PrivateRoute>
         }
-      />
-
-      <Route
-        path="/login"
-        element={isLogged ? <Navigate to="/home" replace /> : <Login />}
       />
     </Routes>
   );
