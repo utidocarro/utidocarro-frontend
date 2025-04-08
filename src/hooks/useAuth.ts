@@ -1,4 +1,6 @@
+import { useGlobalStore } from "@/storage/useGlobalStorage";
+
 export const useAuth = () => {
-  // TODO: Implementar a lógica para verificar se o usuário está autenticado
-  return { isLogged: true };
+  const { user } = useGlobalStore();
+  return Boolean(user);
 };
