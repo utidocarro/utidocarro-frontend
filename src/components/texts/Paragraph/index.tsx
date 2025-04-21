@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import style from './style.module.css';
 import { Colors } from '@styles/Colors';
 
 export interface IParagraph {
@@ -8,6 +7,7 @@ export interface IParagraph {
     weight?: keyof typeof EWeights;
     size?: keyof typeof ESizes;
     align?: keyof typeof EAling;
+    textStyle?: React.HTMLAttributes<HTMLParagraphElement>['style'];
 }
 
 export const EColors = {
@@ -45,19 +45,18 @@ function Paragraph({
     weight = 'normal',
     size = 'normal',
     align = 'left',
+    textStyle,
 }: IParagraph) {
-    return (
-        <p
-            style={{
-                color: EColors[color],
-                fontWeight: EWeights[weight],
-                fontSize: ESizes[size],
-                textAlign: EAling[align],
-            }}
-            className={style.font}>
-            {text}
-        </p>
+    const combinedStyle = Object.assign(
+        {
+            color: EColors[color],
+            fontWeight: EWeights[weight],
+            fontSize: ESizes[size],
+            textAlign: EAling[align],
+        },
+        textStyle
     );
+    return <p style={combinedStyle}>{text}</p>;
 }
 
 export default memo(Paragraph);

@@ -17,7 +17,10 @@ import TextError from '@components/texts/TextError';
 import { login } from '@services';
 import { ApiResponseError } from '@interfaces/api';
 import { useGlobalStore } from '@/storage/useGlobalStorage';
+import PressableText from '@components/buttons/PressableText';
+import { useNavigate } from 'react-router';
 
+// = ============================================================
 const schema = z.object({
     email: z.string().email({ message: 'Digite um Email válido' }),
     password: z
@@ -28,6 +31,7 @@ const schema = z.object({
 
 export interface ILoginFormFields extends z.infer<typeof schema> {}
 
+// = ============================================================
 function Login() {
     const {
         register,
@@ -37,7 +41,9 @@ function Login() {
     } = useForm<ILoginFormFields>({ resolver: zodResolver(schema) });
 
     const { setUser } = useGlobalStore();
+    const navigate = useNavigate();
 
+    // = ============================================================
     const onSubmit: SubmitHandler<ILoginFormFields> = async (data) => {
         try {
             const res = await login({
@@ -57,20 +63,17 @@ function Login() {
         }
     };
 
+    // = ============================================================
     return (
         <div className={style.container}>
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{
-                    duration: 0.4,
+                    duration: 0.7,
                     scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 },
                 }}
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    width: '100%',
-                }}>
+                className={style.montionContainer}>
                 <Card height="20%" width="auto" cardType="tertiary">
                     <form
                         onSubmit={handleSubmit(onSubmit)}
@@ -100,7 +103,20 @@ function Login() {
                             <TextError text={errors?.password?.message ?? ''} />
                         </div>
 
-                        <Checkbox text="Lembrar-me" {...register('remember')} />
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                            }}>
+                            <Checkbox
+                                text="Lembrar-me"
+                                {...register('remember')}
+                            />
+                            <PressableText
+                                onClick={() => navigate('/forgot-password')}
+                                text="Esqueci minha senha"
+                            />
+                        </div>
 
                         <TextButton
                             text={isSubmitting ? 'Carregando...' : 'Entrar'}
