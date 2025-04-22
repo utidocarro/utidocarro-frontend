@@ -1,9 +1,13 @@
-import style from './style.module.css';
+import TextButton from "@components/buttons/TextButton";
+import style from "./style.module.css";
 
 export default function Users() {
-    return (
-        <div>
-            <h1>Arow</h1>
-        </div>
-    );
+  return (
+    <div>
+      <TextButton
+        text="Adicionar usuário"
+        onClick={() => console.log("Alowwwwwwwwwwwwwww")}
+      />
+    </div>
+  );
 }
