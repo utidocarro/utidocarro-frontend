@@ -1,14 +1,18 @@
-import { useAuth } from '@hooks/useAuth';
+import { useAuth, useIsAdmin } from '@hooks/useAuth';
 import { PropsWithChildren, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
-export default function PrivateRoute({ children }: PropsWithChildren) {
+export default function AdminRoute({ children }: PropsWithChildren) {
     const isLogged = useAuth();
+    const isAdmin = useIsAdmin();
+
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!isLogged) navigate('/login', { replace: true });
-    }, [isLogged, navigate]);
+
+        if (!isAdmin) navigate('/app/home', { replace: true });
+    }, [isLogged, isAdmin]);
 
     return children;
 }

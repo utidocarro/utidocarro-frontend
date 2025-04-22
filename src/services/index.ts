@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 
 import { ApiRequest, httpMethods, ILoginRequest } from '@interfaces/api';
 import { api } from './api';
-import { IUser } from '@interfaces/user/user';
+import { ILoginResponse, IUser } from '@interfaces/user/user';
 
 const { CancelToken } = axios;
 
@@ -49,7 +49,7 @@ export const request = async <T>({
 
 // = ============================================================
 export const login = async (data: ILoginRequest) =>
-    await request<IUser>({
+    await request<ILoginResponse>({
         api,
         endpoint: '/api/login',
         method: 'post',

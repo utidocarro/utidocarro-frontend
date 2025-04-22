@@ -1,0 +1,23 @@
+.container {
+    width: 170px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 24px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.separator {
+    width: 80%;
+    opacity: 0.2;
+}

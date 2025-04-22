@@ -50,9 +50,9 @@ function Login() {
                 email: data.email,
                 senha: data.password,
             });
-            if (res) {
+            if (res.usuario) {
                 toast.success('Login realizado com sucesso!');
-                setUser(res);
+                setUser(res.usuario);
                 reset();
             }
         } catch (error: ApiResponseError | unknown) {

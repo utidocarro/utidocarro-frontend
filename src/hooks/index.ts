@@ -1,3 +1,4 @@
-import { useAuth } from "./useAuth";
+import { useAuth } from './useAuth';
+import useOnLogout from './useOnLogout';
 
-export { useAuth };
+export { useAuth, useOnLogout };
