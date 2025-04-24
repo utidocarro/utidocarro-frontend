@@ -1,27 +1,32 @@
-import { Colors } from '@styles/Colors';
-import style from './style.module.css';
-import { PropsWithChildren } from 'react';
+import { Colors } from "@styles/Colors";
+import style from "./style.module.css";
+import { PropsWithChildren } from "react";
 
 export interface IIconRoundedProps extends PropsWithChildren {
-    size: number;
-    type?: 'primary' | 'secondary';
+  size: number;
+  type?: "primary" | "secondary" | "tertiary";
 }
 
 export default function IconRounded({
-    size,
-    type = 'primary',
-    children,
+  size,
+  type = "primary",
+  children,
 }: IIconRoundedProps) {
-    return (
-        <div
-            className={style.container}
-            style={{
-                width: `${size}px`,
-                height: `${size}px`,
-                backgroundColor:
-                    type === 'primary' ? Colors.shape : Colors.white,
-            }}>
-            {children}
-        </div>
-    );
+  const color = {
+    primary: Colors.shape,
+    secondary: Colors.white,
+    tertiary: Colors.lightShape,
+  };
+  return (
+    <div
+      className={style.container}
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        backgroundColor: color[type],
+      }}
+    >
+      {children}
+    </div>
+  );
 }
