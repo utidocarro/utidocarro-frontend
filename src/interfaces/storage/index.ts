@@ -1,4 +1,4 @@
-import { IUser } from "@interfaces/user/user";
+import { IUser } from '@interfaces/user/user';
 
 export interface GlobalState {
   user: IUser | null;

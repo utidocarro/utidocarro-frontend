@@ -1,6 +1,6 @@
-import { InputHTMLAttributes, memo } from "react";
-import style from "./style.module.css";
-import { Colors } from "@styles/Colors";
+import { InputHTMLAttributes, memo } from 'react';
+import style from './style.module.css';
+import { Colors } from '@styles/Colors';
 
 export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;

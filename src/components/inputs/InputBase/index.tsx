@@ -1,9 +1,9 @@
-import { memo } from "react";
-import Input, { IInput } from "../Input";
-import style from "./style.module.css";
-import Label, { ILabel } from "@components/texts/Label";
+import { memo } from 'react';
+import Input, { IInput } from '../Input';
+import style from './style.module.css';
+import Label, { ILabel } from '@components/texts/Label';
 
-export interface IInputBase extends IInput, Pick<ILabel, "text"> {}
+export interface IInputBase extends IInput, Pick<ILabel, 'text'> {}
 
 function InputBase({ text, ...props }: IInputBase) {
   return (

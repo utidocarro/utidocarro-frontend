@@ -1,11 +1,11 @@
-import { PropsWithChildren, memo } from "react";
+import { PropsWithChildren, memo } from 'react';
 
-import Modal, { IModalProps } from "../Modal";
-import style from "./style.module.css";
-import Paragraph from "@components/texts/Paragraph";
-import IconRounded from "@components/icons/IconRounded";
-import { Close } from "@assets/icons";
-import { Colors } from "@styles/Colors";
+import Modal, { IModalProps } from '../Modal';
+import style from './style.module.css';
+import Paragraph from '@components/texts/Paragraph';
+import IconRounded from '@components/icons/IconRounded';
+import { Close } from '@assets/icons';
+import { Colors } from '@styles/Colors';
 
 export interface IModalTitleProps extends IModalProps, PropsWithChildren {
   title: string;
@@ -17,9 +17,9 @@ function ModalTitle({ title, onClose, children, ...props }: IModalTitleProps) {
     <Modal {...props}>
       <div className={style.container}>
         <div className={style.headerContainer}>
-          <Paragraph size="medium" text={title} />
+          <Paragraph size='medium' text={title} />
           <div className={style.buttonIcon} onClick={onClose}>
-            <IconRounded type="tertiary" size={36}>
+            <IconRounded type='tertiary' size={36}>
               <Close width={18} height={18} fill={Colors.white} />
             </IconRounded>
           </div>

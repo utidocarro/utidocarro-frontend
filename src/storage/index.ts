@@ -1,4 +1,4 @@
-import { StorageService } from "@interfaces/storage";
+import { StorageService } from '@interfaces/storage';
 
 const localStorage: StorageService = {
   getItem: <T>(key: string) => {

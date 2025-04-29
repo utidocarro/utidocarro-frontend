@@ -4,16 +4,16 @@ import InputIcon, { IInputIcon } from '../InputIcon';
 import Label, { ILabel } from '@components/texts/Label';
 
 export interface IInputBaseIcon extends IInputIcon, Pick<ILabel, 'text'> {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 function InputBaseIcon({ text, children, ...props }: IInputBaseIcon) {
-    return (
-        <div className={style.container}>
-            <Label text={text} />
-            <InputIcon {...props}>{children}</InputIcon>
-        </div>
-    );
+  return (
+    <div className={style.container}>
+      <Label text={text} />
+      <InputIcon {...props}>{children}</InputIcon>
+    </div>
+  );
 }
 
 export default memo(InputBaseIcon);

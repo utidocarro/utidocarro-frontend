@@ -1,15 +1,15 @@
-import { Colors } from "@styles/Colors";
-import style from "./style.module.css";
-import { PropsWithChildren } from "react";
+import { Colors } from '@styles/Colors';
+import style from './style.module.css';
+import { PropsWithChildren } from 'react';
 
 export interface IIconRoundedProps extends PropsWithChildren {
   size: number;
-  type?: "primary" | "secondary" | "tertiary";
+  type?: 'primary' | 'secondary' | 'tertiary';
 }
 
 export default function IconRounded({
   size,
-  type = "primary",
+  type = 'primary',
   children,
 }: IIconRoundedProps) {
   const color = {
