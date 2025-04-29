@@ -3,11 +3,12 @@ import style from './style.module.css';
 
 export interface ILabel extends HTMLProps<HTMLLabelElement> {
   text: string;
+  fontWeight?: number;
 }
 
-function Label({ text, ...props }: ILabel) {
+function Label({ text, fontWeight = 900, ...props }: ILabel) {
   return (
-    <label className={style.label} {...props}>
+    <label className={style.label} style={{ fontWeight }} {...props}>
       {text}
     </label>
   );

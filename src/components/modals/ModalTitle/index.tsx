@@ -16,13 +16,16 @@ function ModalTitle({ title, onClose, children, ...props }: IModalTitleProps) {
   return (
     <Modal {...props}>
       <div className={style.container}>
-        <div className={style.headerContainer}>
-          <Paragraph size='medium' text={title} />
-          <div className={style.buttonIcon} onClick={onClose}>
-            <IconRounded type='tertiary' size={36}>
-              <Close width={18} height={18} fill={Colors.white} />
-            </IconRounded>
+        <div className={style.header}>
+          <div className={style.headerContainer}>
+            <Paragraph size='medium' text={title} />
+            <div className={style.buttonIcon} onClick={onClose}>
+              <IconRounded type='tertiary' size={36}>
+                <Close width={18} height={18} fill={Colors.white} />
+              </IconRounded>
+            </div>
           </div>
+          <hr color={Colors.lightShape} style={{ width: '100%' }} />
         </div>
         <div>{children}</div>
       </div>

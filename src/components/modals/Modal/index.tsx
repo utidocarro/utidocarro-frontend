@@ -10,7 +10,6 @@ export interface IModalProps extends PropsWithChildren {
 }
 
 function Modal({ isVisible, children }: IModalProps) {
-  console.log(isVisible);
   return (
     <AnimatePresence>
       {isVisible && (
