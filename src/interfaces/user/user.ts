@@ -1,7 +1,3 @@
-export interface ILoginResponse {
-  message: string;
-  usuario: IUser;
-}
 export interface IUser {
   id_usuario: number;
   nome: string;

@@ -11,6 +11,7 @@ import PressableText from '@components/buttons/PressableText';
 import { ApiResponseError } from '@interfaces/api';
 import InputWithError from '@components/inputs/InputWithError';
 import RadioGroup, { IRadioGroupOptions } from '@components/inputs/RadioGroup';
+import { addUser } from '@services/index';
 
 // = ============================================================
 const schema = z.object({
@@ -48,17 +49,18 @@ function AddUserForm({ onCloseForm }: IAddUserForm) {
   // = ============================================================
   const onSubmit: SubmitHandler<IAddUserFormFields> = async (data) => {
     try {
-      console.log(data);
-      // TODO: Implementar a chamada para adicionar o usuário
-      // const res = await login({
-      //   email: data.email,
-      //   senha: data.password,
-      // });
-      // if (res.usuario) {
-      //   toast.success('Usuário adicionado com sucesso!');
-      //   reset();
-      //   onCloseForm();
-      // }
+      const res = await addUser({
+        email: data.email,
+        nome: data.name,
+        senha: data.password,
+        tipo: data.type,
+      });
+
+      if (res.usuario) {
+        toast.success('Usuário adicionado com sucesso!');
+        reset();
+        onCloseForm();
+      }
     } catch (error: ApiResponseError | unknown) {
       const errorMessage =
         (error as ApiResponseError)?.error ||

@@ -1,3 +1,5 @@
+import { IAddUserFormFields } from '@components/forms/AddUserForm';
+import { EUserType, IUser } from '@interfaces/user/user';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export interface IHttp {
@@ -43,8 +45,28 @@ export interface ApiResponseError {
 }
 
 // = ============================================================
-
 export interface ILoginRequest {
   email: string;
   senha: string;
 }
+
+export interface ILoginResponse {
+  message: string;
+  usuario: IUser;
+}
+
+// = ============================================================
+export interface IAddUserRequest {
+  nome: string;
+  email: string;
+  senha: string;
+  tipo: EUserType;
+}
+
+export interface IAddUserResponse {
+  message: string;
+  usuario: Omit<IUser, 'token'>;
+  token: string;
+}
+
+// = ============================================================

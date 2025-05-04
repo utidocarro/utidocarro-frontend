@@ -1,8 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { ApiRequest, httpMethods, ILoginRequest } from '@interfaces/api';
+import {
+  ApiRequest,
+  httpMethods,
+  IAddUserRequest,
+  IAddUserResponse,
+  ILoginRequest,
+  ILoginResponse,
+} from '@interfaces/api';
 import { api } from './api';
-import { ILoginResponse, IUser } from '@interfaces/user/user';
 
 const { CancelToken } = axios;
 
@@ -52,6 +58,15 @@ export const login = async (data: ILoginRequest) =>
   await request<ILoginResponse>({
     api,
     endpoint: '/api/login',
+    method: 'post',
+    data,
+  });
+
+// = ============================================================
+export const addUser = async (data: IAddUserRequest) =>
+  await request<IAddUserResponse>({
+    api,
+    endpoint: '/api/usuarios/cadastro',
     method: 'post',
     data,
   });
