@@ -5,12 +5,18 @@ import Label, { ILabel } from '@components/texts/Label';
 
 export interface IInputBaseIcon extends IInputIcon, Pick<ILabel, 'text'> {
   children: ReactNode;
+  labelFontWeight?: number;
 }
 
-function InputBaseIcon({ text, children, ...props }: IInputBaseIcon) {
+function InputBaseIcon({
+  text,
+  children,
+  labelFontWeight = 900,
+  ...props
+}: IInputBaseIcon) {
   return (
     <div className={style.container}>
-      <Label text={text} />
+      <Label text={text} fontWeight={labelFontWeight} />
       <InputIcon {...props}>{children}</InputIcon>
     </div>
   );

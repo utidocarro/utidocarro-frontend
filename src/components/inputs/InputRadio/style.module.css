@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.customRadio input {
+  display: none;
+}
+
+.customRadio input + label:before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1px solid var(--light-shape);
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+  margin-bottom: 3px;
+}
+
+.customRadio input:checked + label:before {
+  box-sizing: border-box;
+  border: 5px solid white;
+  padding: 4px;
+}

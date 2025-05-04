@@ -18,7 +18,7 @@ export default function Users() {
         onClose={() => setOpenAddUserModal(false)}
         isVisible={openAddUserModal}
       >
-        <AddUserForm />
+        <AddUserForm onCloseForm={() => setOpenAddUserModal(false)} />
       </ModalTitle>
     </div>
   );

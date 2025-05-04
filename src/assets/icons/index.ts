@@ -4,5 +4,6 @@ import Users from './Users';
 import Wrench from './Wrench';
 import Logout from './Logout';
 import Close from './Close';
+import ArrowDown from './ArrowDown';
 
-export { Eye, EyeHide, Users, Wrench, Logout, Close };
+export { Eye, EyeHide, Users, Wrench, Logout, Close, ArrowDown };
