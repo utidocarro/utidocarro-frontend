@@ -47,7 +47,15 @@ function UsersTable({ users, setUsers, onEditUser }: IUsersTableProps) {
   };
 
   const statusBodyTemplate = ({ deletado }: IUser) => {
-    return <Tag value={formatBoolean(deletado)} severity='success'></Tag>;
+    return (
+      <Tag
+        className={[
+          style.tag,
+          deletado ? style.tagError : style.tagSuccess,
+        ].join(' ')}
+        value={formatBoolean(deletado)}
+      ></Tag>
+    );
   };
 
   const actionsBodyTemplate = (user: IUser) => {
