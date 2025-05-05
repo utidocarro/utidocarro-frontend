@@ -69,3 +69,10 @@ export interface IAddUserResponse {
 }
 
 // = ============================================================
+export interface IEditUserRequest extends IAddUserRequest {
+  id: number;
+}
+
+export interface IEditUserResponse extends Omit<IAddUserResponse, 'token'> {}
+
+// = ============================================================

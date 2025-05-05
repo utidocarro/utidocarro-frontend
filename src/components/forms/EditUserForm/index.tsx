@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,10 +11,12 @@ import PressableText from '@components/buttons/PressableText';
 import { ApiResponseError } from '@interfaces/api';
 import InputWithError from '@components/inputs/InputWithError';
 import RadioGroup, { IRadioGroupOptions } from '@components/inputs/RadioGroup';
-import { addUser } from '@services/index';
+import { editUser } from '@services/index';
+import InputBase from '@components/inputs/InputBase';
 
 // = ============================================================
 const schema = z.object({
+  id: z.number(),
   name: z
     .string()
     .min(3, { message: 'O nome deve ter no mínimo 3 caracteres' }),
@@ -25,11 +27,12 @@ const schema = z.object({
   type: z.nativeEnum(EUserType),
 });
 
-export interface IAddUserFormFields extends z.infer<typeof schema> {}
+export interface IEditUserFormFields extends z.infer<typeof schema> {}
 
-export interface IAddUserForm {
+export interface IEditUserForm {
   onCloseForm: VoidFunction;
-  onAddNewUser: (newUser: Omit<IUser, 'token'>) => void;
+  onEditUser: (newUser: Omit<IUser, 'token'>) => void;
+  user: IEditUserFormFields;
 }
 
 // = ============================================================
@@ -39,18 +42,22 @@ const defaultOptions: Array<IRadioGroupOptions> = [
 ];
 
 // = ============================================================
-function AddUserForm({ onCloseForm, onAddNewUser }: IAddUserForm) {
+function EditUserForm({ onCloseForm, onEditUser, user }: IEditUserForm) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<IAddUserFormFields>({ resolver: zodResolver(schema) });
+  } = useForm<IEditUserFormFields>({
+    resolver: zodResolver(schema),
+    defaultValues: user,
+  });
 
   // = ============================================================
-  const onSubmit: SubmitHandler<IAddUserFormFields> = async (data) => {
+  const onSubmit: SubmitHandler<IEditUserFormFields> = async (data) => {
     try {
-      const res = await addUser({
+      const res = await editUser({
+        id: data.id,
         email: data.email,
         nome: data.name,
         senha: data.password,
@@ -58,8 +65,8 @@ function AddUserForm({ onCloseForm, onAddNewUser }: IAddUserForm) {
       });
 
       if (res.usuario) {
-        toast.success('Usuário adicionado com sucesso!');
-        onAddNewUser(res.usuario);
+        toast.success('Usuário editado com sucesso!');
+        onEditUser(res.usuario);
         reset();
         onCloseForm();
       }
@@ -67,13 +74,20 @@ function AddUserForm({ onCloseForm, onAddNewUser }: IAddUserForm) {
       const errorMessage =
         (error as ApiResponseError)?.error ||
         'Servidor indisponível no momento!';
-      toast.error(`Erro ao adicionar usuário: ${errorMessage}`);
+      toast.error(`Erro ao editar usuário: ${errorMessage}`);
     }
   };
 
   // = ============================================================
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={style.formContainer}>
+      <InputBase
+        text='Identificador'
+        placeholder='ID'
+        value={user.id}
+        disabled
+      />
+
       <InputWithError
         text='Nome'
         placeholder='Digite o nome'
@@ -101,11 +115,12 @@ function AddUserForm({ onCloseForm, onAddNewUser }: IAddUserForm) {
         register={register('type')}
         name='radio'
         options={defaultOptions}
+        selectedValue={user.type}
       />
       <div className={style.buttonsContainer}>
         <PressableText text='Cancelar' onClick={onCloseForm} />
         <TextButton
-          text={isSubmitting ? 'Carregando...' : 'Adicionar'}
+          text={isSubmitting ? 'Carregando...' : 'Editar'}
           type='submit'
           disabled={isSubmitting}
         />
@@ -114,4 +129,4 @@ function AddUserForm({ onCloseForm, onAddNewUser }: IAddUserForm) {
   );
 }
 
-export default memo(AddUserForm);
+export default memo(EditUserForm);

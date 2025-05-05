@@ -5,6 +5,8 @@ import {
   httpMethods,
   IAddUserRequest,
   IAddUserResponse,
+  IEditUserRequest,
+  IEditUserResponse,
   ILoginRequest,
   ILoginResponse,
 } from '@interfaces/api';
@@ -86,4 +88,13 @@ export const deleteUserById = async (id: number) =>
     api,
     endpoint: `/api/usuarios/${id}`,
     method: 'patch',
+  });
+
+// = ============================================================
+export const editUser = async (data: IEditUserRequest) =>
+  await request<IEditUserResponse>({
+    api,
+    endpoint: `/api/usuarios/${data.id}`,
+    method: 'put',
+    data,
   });

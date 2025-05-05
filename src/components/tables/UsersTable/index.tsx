@@ -1,24 +1,24 @@
 import { Dispatch, memo, SetStateAction } from 'react';
-
-import style from './style.module.css';
 import { IUser } from '@interfaces/user/user';
 import { toast } from 'react-toastify';
-
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Tag } from 'primereact/tag';
 
+import style from './style.module.css';
 import { deleteUserById } from '@services/index';
 import { Colors } from '@styles/Colors';
 import { formatBoolean, formatDate, formatUserType } from '@utils/index';
-import { Trash } from '@assets/icons';
+import { Pen, Trash } from '@assets/icons';
+import { IEditUserModalState } from '@pages/Users';
 
 export interface IUsersTableProps {
   users: Array<Omit<IUser, 'token'>>;
   setUsers: Dispatch<SetStateAction<Omit<IUser, 'token'>[]>>;
+  onEditUser: Dispatch<SetStateAction<IEditUserModalState>>;
 }
 
-function UsersTable({ users, setUsers }: IUsersTableProps) {
+function UsersTable({ users, setUsers, onEditUser }: IUsersTableProps) {
   async function deleteUser(id: number) {
     try {
       const res = await deleteUserById(id);
@@ -50,15 +50,33 @@ function UsersTable({ users, setUsers }: IUsersTableProps) {
     return <Tag value={formatBoolean(deletado)} severity='success'></Tag>;
   };
 
-  const actionsBodyTemplate = ({ id_usuario }: IUser) => {
+  const actionsBodyTemplate = (user: IUser) => {
     return (
       <div className={style.actionsContainer}>
+        <Pen
+          fill={Colors.white}
+          width={22}
+          height={22}
+          style={{ cursor: 'pointer' }}
+          onClick={() =>
+            onEditUser({
+              open: true,
+              user: {
+                id: user.id_usuario,
+                name: user.nome,
+                email: user.email,
+                password: user.senha,
+                type: user.tipo,
+              },
+            })
+          }
+        />
         <Trash
           fill={Colors.error}
           width={22}
           height={22}
           style={{ cursor: 'pointer' }}
-          onClick={async () => await deleteUser(id_usuario)}
+          onClick={async () => await deleteUser(user.id_usuario)}
         />
       </div>
     );

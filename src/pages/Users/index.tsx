@@ -6,12 +6,30 @@ import ModalTitle from '@components/modals/ModalTitle';
 import AddUserForm from '@components/forms/AddUserForm';
 import Title from '@components/texts/Title';
 import Subtitle from '@components/texts/Subtitle';
-import { IUser } from '@interfaces/user/user';
+import { EUserType, IUser } from '@interfaces/user/user';
 import { getUsers } from '@services/index';
 import UsersTable from '@components/tables/UsersTable';
+import EditUserForm, {
+  IEditUserFormFields,
+} from '@components/forms/EditUserForm';
+
+export interface IEditUserModalState {
+  open: boolean;
+  user: IEditUserFormFields;
+}
+
+const defaultUser: IEditUserFormFields = {
+  id: 0,
+  name: '',
+  email: '',
+  password: '',
+  type: EUserType.USER,
+};
 
 export default function Users() {
   const [openAddUserModal, setOpenAddUserModal] = useState<boolean>(false);
+  const [openEditUserModal, setOpenEditUserModal] =
+    useState<IEditUserModalState>({ open: false, user: defaultUser });
   const [users, setUsers] = useState<Array<Omit<IUser, 'token'>>>([]);
 
   useEffect(() => {
@@ -23,8 +41,26 @@ export default function Users() {
     })();
   }, []);
 
+  function handleEditUser(editedUser: Omit<IUser, 'token'>) {
+    const newUsers = users.map((u) => {
+      if (u.id_usuario === editedUser.id_usuario) {
+        return {
+          ...u,
+          email: editedUser.email,
+          nome: editedUser.nome,
+          senha: editedUser.senha,
+          tipo: editedUser.tipo,
+        };
+      }
+      return u;
+    });
+
+    setUsers(newUsers);
+  }
+
   return (
     <>
+      {/* ----- Add User Modal ----- */}
       <ModalTitle
         title='Adicionar usuário'
         onClose={() => setOpenAddUserModal(false)}
@@ -35,6 +71,23 @@ export default function Users() {
           onAddNewUser={(newUser) => setUsers([...users, newUser])}
         />
       </ModalTitle>
+
+      {/* ----- Edit User Modal ----- */}
+      <ModalTitle
+        title='Editar usuário'
+        onClose={() => setOpenEditUserModal({ open: false, user: defaultUser })}
+        isVisible={openEditUserModal.open}
+      >
+        <EditUserForm
+          onCloseForm={() =>
+            setOpenEditUserModal({ open: false, user: defaultUser })
+          }
+          onEditUser={(editedUser) => handleEditUser(editedUser)}
+          user={openEditUserModal.user}
+        />
+      </ModalTitle>
+
+      {/* ----- Screen ----- */}
       <div className={style.container}>
         <Title title='Gestão de Usuários' />
         <div className={style.subContainer}>
@@ -47,7 +100,11 @@ export default function Users() {
             onClick={() => setOpenAddUserModal(true)}
           />
         </div>
-        <UsersTable users={users} setUsers={setUsers} />
+        <UsersTable
+          users={users}
+          setUsers={setUsers}
+          onEditUser={setOpenEditUserModal}
+        />
       </div>
     </>
   );

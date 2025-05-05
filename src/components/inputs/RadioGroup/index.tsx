@@ -10,9 +10,16 @@ export interface IRadioGroupProps
   extends Pick<ILabel, 'text'>,
     Pick<IInputRadioProps, 'name' | 'register'> {
   options: Array<IRadioGroupOptions>;
+  selectedValue?: string;
 }
 
-function RadioGroup({ text, name, register, options }: IRadioGroupProps) {
+function RadioGroup({
+  text,
+  name,
+  register,
+  selectedValue,
+  options,
+}: IRadioGroupProps) {
   return (
     <div className={style.container}>
       <Label text={text} fontWeight={500} />
@@ -26,7 +33,10 @@ function RadioGroup({ text, name, register, options }: IRadioGroupProps) {
               name={name}
               value={value}
               label={label}
-              defaultChecked={index === 0}
+              defaultChecked={
+                (Boolean(selectedValue) && selectedValue == value) ??
+                index === 0
+              }
             />
           ))}
       </div>

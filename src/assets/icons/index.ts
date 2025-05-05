@@ -7,6 +7,7 @@ import Close from './Close';
 import ArrowDown from './ArrowDown';
 import CirclePlus from './CirclePlus';
 import Trash from './Trash';
+import Pen from './Pen';
 
 export {
   Eye,
@@ -18,4 +19,5 @@ export {
   ArrowDown,
   CirclePlus,
   Trash,
+  Pen,
 };
