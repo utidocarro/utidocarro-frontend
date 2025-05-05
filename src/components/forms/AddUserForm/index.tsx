@@ -5,10 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 
 import style from './style.module.css';
-import { EUserType } from '@interfaces/user/user';
+import { EUserType, IUser } from '@interfaces/user/user';
 import TextButton from '@components/buttons/TextButton';
 import PressableText from '@components/buttons/PressableText';
-import { ApiResponseError } from '@interfaces/api';
+import { ApiResponseError, IAddUserResponse } from '@interfaces/api';
 import InputWithError from '@components/inputs/InputWithError';
 import RadioGroup, { IRadioGroupOptions } from '@components/inputs/RadioGroup';
 import { addUser } from '@services/index';
@@ -29,6 +29,7 @@ export interface IAddUserFormFields extends z.infer<typeof schema> {}
 
 export interface IAddUserForm {
   onCloseForm: VoidFunction;
+  onAddNewUser: (newUser: Omit<IUser, 'token'>) => void;
 }
 
 // = ============================================================
@@ -38,7 +39,7 @@ const defaultOptions: Array<IRadioGroupOptions> = [
 ];
 
 // = ============================================================
-function AddUserForm({ onCloseForm }: IAddUserForm) {
+function AddUserForm({ onCloseForm, onAddNewUser }: IAddUserForm) {
   const {
     register,
     handleSubmit,
@@ -58,6 +59,7 @@ function AddUserForm({ onCloseForm }: IAddUserForm) {
 
       if (res.usuario) {
         toast.success('Usuário adicionado com sucesso!');
+        onAddNewUser(res.usuario);
         reset();
         onCloseForm();
       }

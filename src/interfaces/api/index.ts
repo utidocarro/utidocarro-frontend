@@ -1,4 +1,3 @@
-import { IAddUserFormFields } from '@components/forms/AddUserForm';
 import { EUserType, IUser } from '@interfaces/user/user';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 

@@ -9,6 +9,7 @@ import {
   ILoginResponse,
 } from '@interfaces/api';
 import { api } from './api';
+import { IUser } from '@interfaces/user/user';
 
 const { CancelToken } = axios;
 
@@ -69,4 +70,20 @@ export const addUser = async (data: IAddUserRequest) =>
     endpoint: '/api/usuarios/cadastro',
     method: 'post',
     data,
+  });
+
+// = ============================================================
+export const getUsers = async () =>
+  await request<Array<Omit<IUser, 'token'>>>({
+    api,
+    endpoint: '/api/usuarios/busca_usuarios',
+    method: 'get',
+  });
+
+// = ============================================================
+export const deleteUserById = async (id: number) =>
+  await request<{ message?: string; error?: string }>({
+    api,
+    endpoint: `/api/usuarios/${id}`,
+    method: 'patch',
   });
