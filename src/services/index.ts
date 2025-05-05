@@ -5,6 +5,8 @@ import {
   httpMethods,
   IAddUserRequest,
   IAddUserResponse,
+  IAddVehicleRequest,
+  IAddVehicleResponse,
   IEditUserRequest,
   IEditUserResponse,
   ILoginRequest,
@@ -12,6 +14,7 @@ import {
 } from '@interfaces/api';
 import { api } from './api';
 import { IUser } from '@interfaces/user/user';
+import { IVehicle } from '@interfaces/vehicle/vehicle';
 
 const { CancelToken } = axios;
 
@@ -98,3 +101,39 @@ export const editUser = async (data: IEditUserRequest) =>
     method: 'put',
     data,
   });
+
+// = ============================================================
+export const addVehicle = async (data: IAddVehicleRequest) =>
+  await request<IAddVehicleResponse>({
+    api,
+    endpoint: '/api/veiculos/cadastro',
+    method: 'post',
+    data,
+  });
+
+// = ============================================================
+export const getVehicles = async () =>
+  await request<Array<IVehicle>>({
+    api,
+    endpoint: '/api/veiculos/busca_veiculos',
+    method: 'get',
+  });
+
+// = ============================================================
+export const deleteVehicleById = async (id: number) =>
+  await request<{ message?: string; error?: string }>({
+    api,
+    endpoint: `/api/veiculos/${id}`,
+    method: 'patch',
+  });
+
+// = ============================================================
+export const editVehicle = async (data: IVehicle) =>
+  await request<{ message?: string; veiculo?: IVehicle; error?: string }>({
+    api,
+    endpoint: `/api/veiculos/${data.id}`,
+    method: 'put',
+    data,
+  });
+
+// = ============================================================

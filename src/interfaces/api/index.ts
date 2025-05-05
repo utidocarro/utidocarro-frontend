@@ -1,4 +1,5 @@
 import { EUserType, IUser } from '@interfaces/user/user';
+import { IVehicle } from '@interfaces/vehicle/vehicle';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export interface IHttp {
@@ -74,5 +75,14 @@ export interface IEditUserRequest extends IAddUserRequest {
 }
 
 export interface IEditUserResponse extends Omit<IAddUserResponse, 'token'> {}
+
+// = ============================================================
+export interface IAddVehicleRequest extends Omit<IVehicle, 'id' | 'deletado'> {}
+
+export interface IAddVehicleResponse {
+  message?: string;
+  veiculo?: IVehicle;
+  error?: string;
+}
 
 // = ============================================================

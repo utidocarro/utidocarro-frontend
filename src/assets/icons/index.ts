@@ -8,6 +8,7 @@ import ArrowDown from './ArrowDown';
 import CirclePlus from './CirclePlus';
 import Trash from './Trash';
 import Pen from './Pen';
+import Car from './Car';
 
 export {
   Eye,
@@ -20,4 +21,5 @@ export {
   CirclePlus,
   Trash,
   Pen,
+  Car,
 };

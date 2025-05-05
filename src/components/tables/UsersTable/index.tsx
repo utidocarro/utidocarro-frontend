@@ -1,11 +1,11 @@
 import { Dispatch, memo, SetStateAction } from 'react';
-import { IUser } from '@interfaces/user/user';
 import { toast } from 'react-toastify';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Tag } from 'primereact/tag';
 
 import style from './style.module.css';
+import { IUser } from '@interfaces/user/user';
 import { deleteUserById } from '@services/index';
 import { Colors } from '@styles/Colors';
 import { formatBoolean, formatDate, formatUserType } from '@utils/index';

@@ -7,6 +7,7 @@ import Users from '@pages/Users';
 import AdminRoute from './AdminRoute';
 import AppLayout from '@components/layout/AppLayout';
 import PageNotFound from '@pages/PageNotFound';
+import Vehicles from '@pages/Vehicles';
 
 export default function AppRoutes() {
   const isLogged = useAuth();
@@ -46,6 +47,14 @@ export default function AppRoutes() {
             <PrivateRoute>
               <div style={{ color: 'white' }}>Home</div>
             </PrivateRoute>
+          }
+        />
+        <Route
+          path='vehicles'
+          element={
+            <AdminRoute>
+              <Vehicles />
+            </AdminRoute>
           }
         />
       </Route>
