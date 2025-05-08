@@ -7,7 +7,7 @@ import AddUserForm from '@components/forms/AddUserForm';
 import Title from '@components/texts/Title';
 import Subtitle from '@components/texts/Subtitle';
 import { EUserType, IUser } from '@interfaces/user/user';
-import { getUsers } from '@services/index';
+import { getUsers, getVehicles } from '@services/index';
 import UsersTable from '@components/tables/UsersTable';
 import EditUserForm, {
   IEditUserFormFields,
@@ -31,19 +31,19 @@ export default function Vehicles() {
     useState<boolean>(false);
   const [openEditVehicleModal, setOpenEditVehicleModal] =
     useState<IEditUserModalState>({ open: false, user: defaultVehicle });
-  const [users, setUsers] = useState<Array<Omit<IUser, 'token'>>>([]);
+  const [vehicles, setVehicles] = useState<Array<Omit<IUser, 'token'>>>([]);
 
   useEffect(() => {
     (async () => {
-      const res = await getUsers();
+      const res = await getVehicles();
       if (res) {
-        setUsers(res);
+        setVehicles(res);
       }
     })();
   }, []);
 
   function handleEditUser(editedUser: Omit<IUser, 'token'>) {
-    const newUsers = users.map((u) => {
+    const newUsers = vehicles.map((u) => {
       if (u.id_usuario === editedUser.id_usuario) {
         return {
           ...u,
@@ -56,7 +56,7 @@ export default function Vehicles() {
       return u;
     });
 
-    setUsers(newUsers);
+    setVehicles(newUsers);
   }
   return (
     <>
@@ -68,7 +68,7 @@ export default function Vehicles() {
       >
         <AddUserForm
           onCloseForm={() => setOpenAddVehicleModal(false)}
-          onAddNewUser={(newUser) => setUsers([...users, newUser])}
+          onAddNewUser={(newUser) => setVehicles([...vehicles, newUser])}
         />
       </ModalTitle>
 
@@ -78,18 +78,18 @@ export default function Vehicles() {
         <div className={style.subContainer}>
           <Subtitle
             subtitleType='secondary'
-            text={`Veículos (${users.length})`}
+            text={`Veículos (${vehicles.length})`}
           />
           <TextButton
-            text='Adicionar usuário'
-            onClick={() => setOpenAddUserModal(true)}
+            text='Adicionar Veículo'
+            onClick={() => setOpenAddVehicleModal(true)}
           />
         </div>
-        <UsersTable
+        {/* <UsersTable
           users={users}
           setUsers={setUsers}
           onEditUser={setOpenEditUserModal}
-        />
+        /> */}
       </div>
     </>
   );

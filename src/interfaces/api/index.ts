@@ -44,6 +44,11 @@ export interface ApiResponseError {
   message?: string;
 }
 
+export interface IDefaultResponse {
+  message?: string;
+  error?: string;
+}
+
 // = ============================================================
 export interface ILoginRequest {
   email: string;
@@ -59,7 +64,6 @@ export interface ILoginResponse {
 export interface IAddUserRequest {
   nome: string;
   email: string;
-  senha: string;
   tipo: EUserType;
 }
 
@@ -74,15 +78,21 @@ export interface IEditUserRequest extends IAddUserRequest {
   id: number;
 }
 
-export interface IEditUserResponse extends Omit<IAddUserResponse, 'token'> {}
+export interface IEditUserResponse
+  extends Omit<IAddUserResponse, 'token' | 'senha'> {}
 
 // = ============================================================
 export interface IAddVehicleRequest extends Omit<IVehicle, 'id' | 'deletado'> {}
 
-export interface IAddVehicleResponse {
-  message?: string;
+export interface IAddVehicleResponse extends IDefaultResponse {
   veiculo?: IVehicle;
-  error?: string;
+}
+
+// = ============================================================
+export interface IEditVehicleRequest extends IVehicle {}
+
+export interface IEditVehicleResponse extends IDefaultResponse {
+  veiculo?: IVehicle;
 }
 
 // = ============================================================

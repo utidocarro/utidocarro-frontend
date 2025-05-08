@@ -7,8 +7,11 @@ import {
   IAddUserResponse,
   IAddVehicleRequest,
   IAddVehicleResponse,
+  IDefaultResponse,
   IEditUserRequest,
   IEditUserResponse,
+  IEditVehicleRequest,
+  IEditVehicleResponse,
   ILoginRequest,
   ILoginResponse,
 } from '@interfaces/api';
@@ -87,7 +90,7 @@ export const getUsers = async () =>
 
 // = ============================================================
 export const deleteUserById = async (id: number) =>
-  await request<{ message?: string; error?: string }>({
+  await request<IDefaultResponse>({
     api,
     endpoint: `/api/usuarios/${id}`,
     method: 'patch',
@@ -121,15 +124,15 @@ export const getVehicles = async () =>
 
 // = ============================================================
 export const deleteVehicleById = async (id: number) =>
-  await request<{ message?: string; error?: string }>({
+  await request<IDefaultResponse>({
     api,
     endpoint: `/api/veiculos/${id}`,
     method: 'patch',
   });
 
 // = ============================================================
-export const editVehicle = async (data: IVehicle) =>
-  await request<{ message?: string; veiculo?: IVehicle; error?: string }>({
+export const editVehicle = async (data: IEditVehicleRequest) =>
+  await request<IEditVehicleResponse>({
     api,
     endpoint: `/api/veiculos/${data.id}`,
     method: 'put',
