@@ -8,7 +8,7 @@ import style from './style.module.css';
 import { IVehicle } from '@interfaces/vehicle/vehicle';
 import { deleteVehicleById } from '@services/index';
 import { Colors } from '@styles/Colors';
-import { formatBoolean, formatDate, formatUserType } from '@utils/index';
+import { formatBoolean } from '@utils/index';
 import { Pen, Trash } from '@assets/icons';
 import { IEditVehicleModalState } from '@pages/Vehicles';
 
@@ -28,17 +28,17 @@ function VehiclesTable({
       const res = await deleteVehicleById(id);
 
       if (res.message) {
-        const updatedVehicles = vehicles.map((user) => {
-          if (user.id === id) {
-            return { ...user, deletado: true };
+        const updatedVehicles = vehicles.map((vehicle) => {
+          if (vehicle.id === id) {
+            return { ...vehicle, deletado: true };
           }
-          return user;
+          return vehicle;
         });
         setVehicles(updatedVehicles);
         toast.success('Veículo desativado!');
       }
     } catch (error) {
-      console.error('Error deleting veículo:', error);
+      console.error('Error deleting vehicle:', error);
     }
   }
 
@@ -66,11 +66,12 @@ function VehiclesTable({
             onEditVehicle({
               open: true,
               vehicle: {
-                id: vehicle.id_usuario,
-                name: vehicle.nome,
-                email: vehicle.email,
-                password: vehicle.senha,
-                type: vehicle.tipo,
+                id: vehicle.id,
+                model: vehicle.modelo,
+                brand: vehicle.marca,
+                year: vehicle.ano.toString(),
+                plate: vehicle.placa,
+                customer: vehicle.cliente,
               },
             })
           }
@@ -80,7 +81,7 @@ function VehiclesTable({
           width={22}
           height={22}
           style={{ cursor: 'pointer' }}
-          onClick={async () => await deleteVehicle(user.id_usuario)}
+          onClick={async () => await deleteVehicle(vehicle.id)}
         />
       </div>
     );
@@ -88,7 +89,7 @@ function VehiclesTable({
 
   return (
     <DataTable
-      value={users}
+      value={vehicles}
       paginator
       rows={10}
       style={{
@@ -97,15 +98,12 @@ function VehiclesTable({
       }}
       className={style.tableContainer}
     >
-      <Column field='id_usuario' header='ID' />
-      <Column field='nome' header='Nome' />
-      <Column field='email' header='Email' />
-      <Column field='tipo' header='Tipo' body={userTypeBodyTemplate} />
-      <Column
-        field='data_criacao'
-        header='Data de Criação'
-        body={dateBodyTemplate}
-      />
+      <Column field='id' header='ID' />
+      <Column field='modelo' header='Modelo' />
+      <Column field='marca' header='Marca' />
+      <Column field='ano' header='Ano' />
+      <Column field='placa' header='Placa' />
+      <Column field='cliente' header='Cliente' />
       <Column field='deletado' header='Deletado' body={statusBodyTemplate} />
       <Column header='Ações' body={actionsBodyTemplate} />
     </DataTable>

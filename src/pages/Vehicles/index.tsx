@@ -8,14 +8,14 @@ import Title from '@components/texts/Title';
 import Subtitle from '@components/texts/Subtitle';
 import { IVehicle } from '@interfaces/vehicle/vehicle';
 import { getVehicles } from '@services/index';
-import VehiclesTable from '@components/tables/VehiclesTable';
+import VehiclesTable from '@components/tables/VehiclesTabel';
 import EditVehicleForm, {
   IEditVehicleFormFields,
 } from '@components/forms/EditVehicleForm';
 
-export interface IEditUserModalState {
+export interface IEditVehicleModalState {
   open: boolean;
-  user: IEditVehicleFormFields;
+  vehicle: IEditVehicleFormFields;
 }
 
 const defaultVehicle: IEditVehicleFormFields = {
@@ -31,8 +31,8 @@ export default function Vehicles() {
   const [openAddVehicleModal, setOpenAddVehicleModal] =
     useState<boolean>(false);
   const [openEditVehicleModal, setOpenEditVehicleModal] =
-    useState<IEditUserModalState>({ open: false, user: defaultVehicle });
-  const [vehicles, setVehicles] = useState<Array<Omit<IVehicle, 'token'>>>([]);
+    useState<IEditVehicleModalState>({ open: false, vehicle: defaultVehicle });
+  const [vehicles, setVehicles] = useState<Array<IVehicle>>([]);
 
   useEffect(() => {
     (async () => {
@@ -43,25 +43,28 @@ export default function Vehicles() {
     })();
   }, []);
 
-  function handleEditUser(editedUser: Omit<IVehicle, 'token'>) {
-    const newUsers = vehicles.map((u) => {
-      if (u.id_usuario === editedUser.id_usuario) {
+  function handleEditVehicle(editedVehicle: IVehicle) {
+    const newVehicles = vehicles.map((v) => {
+      console.log(v);
+      if (v.id === editedVehicle.id) {
         return {
-          ...u,
-          email: editedUser.email,
-          nome: editedUser.nome,
-          senha: editedUser.senha,
-          tipo: editedUser.tipo,
+          ...v,
+          modelo: editedVehicle.modelo,
+          marca: editedVehicle.marca,
+          ano: editedVehicle.ano,
+          placa: editedVehicle.placa,
+          cliente: editedVehicle.cliente,
+          deletado: editedVehicle.deletado,
         };
       }
-      return u;
+      return v;
     });
 
-    setVehicles(newUsers);
+    setVehicles(newVehicles);
   }
   return (
     <>
-      {/* ----- Add User Modal ----- */}
+      {/* ----- Add Vehicle Modal ----- */}
       <ModalTitle
         title='Adicionar veículo'
         onClose={() => setOpenAddVehicleModal(false)}
@@ -72,6 +75,23 @@ export default function Vehicles() {
           onAddNewVehicle={(newVehicle) =>
             setVehicles([...vehicles, newVehicle])
           }
+        />
+      </ModalTitle>
+
+      {/* ----- Edit Vehicle Modal ----- */}
+      <ModalTitle
+        title='Editar veículo'
+        onClose={() =>
+          setOpenEditVehicleModal({ open: false, vehicle: defaultVehicle })
+        }
+        isVisible={openEditVehicleModal.open}
+      >
+        <EditVehicleForm
+          onCloseForm={() =>
+            setOpenEditVehicleModal({ open: false, vehicle: defaultVehicle })
+          }
+          onEditVehicle={(editedVehicle) => handleEditVehicle(editedVehicle)}
+          vehicle={openEditVehicleModal.vehicle}
         />
       </ModalTitle>
 
