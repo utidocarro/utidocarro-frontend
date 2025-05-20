@@ -1,31 +1,32 @@
-import Login from '@pages/Login';
-import { Navigate, Route, Routes } from 'react-router';
-import PrivateRoute from '@routes/PrivateRoute';
-import { useAuth } from '@hooks/useAuth';
-import ForgotPassword from '@pages/ForgotPassword';
-import Users from '@pages/Users';
-import AdminRoute from './AdminRoute';
-import AppLayout from '@components/layout/AppLayout';
-import PageNotFound from '@pages/PageNotFound';
+import Login from "@pages/Login";
+import { Navigate, Route, Routes } from "react-router";
+import PrivateRoute from "@routes/PrivateRoute";
+import { useAuth } from "@hooks/useAuth";
+import ForgotPassword from "@pages/ForgotPassword";
+import Users from "@pages/Users";
+import AdminRoute from "./AdminRoute";
+import AppLayout from "@components/layout/AppLayout";
+import PageNotFound from "@pages/PageNotFound";
+import AdminHomePage from "@pages/AdminHome/AdminHome"; // Importando o novo AdminHomePage
 
 export default function AppRoutes() {
   const isLogged = useAuth();
   return (
     <Routes>
       <Route
-        path='/'
-        element={<Navigate to={isLogged ? '/app/home' : '/login'} replace />}
+        path="/"
+        element={<Navigate to={isLogged ? "/app/home" : "/login"} replace />}
       />
 
       <Route
-        path='/login'
-        element={isLogged ? <Navigate to='/app/home' replace /> : <Login />}
+        path="/login"
+        element={isLogged ? <Navigate to="/app/home" replace /> : <Login />}
       />
 
-      <Route path='forgot-password' element={<ForgotPassword />} />
+      <Route path="forgot-password" element={<ForgotPassword />} />
 
       <Route
-        path='/app'
+        path="/app"
         element={
           <PrivateRoute>
             <AppLayout />
@@ -33,7 +34,7 @@ export default function AppRoutes() {
         }
       >
         <Route
-          path='users'
+          path="users"
           element={
             <AdminRoute>
               <Users />
@@ -41,15 +42,16 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path='home'
+          path="home" // Esta é a rota que o Admin acessará como Home
           element={
-            <PrivateRoute>
-              <div style={{ color: 'white' }}>Home</div>
-            </PrivateRoute>
+            <AdminRoute> {/* Envolvendo com AdminRoute se for específico para admin */}
+              <AdminHomePage /> {/* Renderizando o novo AdminHomePage */}
+            </AdminRoute>
           }
         />
       </Route>
-      <Route path='*' element={<PageNotFound />} />
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 }
+
