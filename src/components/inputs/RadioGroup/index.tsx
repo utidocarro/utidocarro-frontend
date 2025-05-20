@@ -34,7 +34,7 @@ function RadioGroup({
               value={value}
               label={label}
               defaultChecked={
-                (Boolean(selectedValue) && selectedValue == value) ??
+                (Boolean(selectedValue) && selectedValue == value) ||
                 index === 0
               }
             />

@@ -1,13 +1,15 @@
-import Login from "@pages/Login";
-import { Navigate, Route, Routes } from "react-router";
-import PrivateRoute from "@routes/PrivateRoute";
-import { useAuth } from "@hooks/useAuth";
-import ForgotPassword from "@pages/ForgotPassword";
-import Users from "@pages/Users";
-import AdminRoute from "./AdminRoute";
-import AppLayout from "@components/layout/AppLayout";
-import PageNotFound from "@pages/PageNotFound";
+import Login from '@pages/Login';
+import { Navigate, Route, Routes } from 'react-router';
+import PrivateRoute from '@routes/PrivateRoute';
+import { useAuth } from '@hooks/useAuth';
+import ForgotPassword from '@pages/ForgotPassword';
+import Users from '@pages/Users';
+import AdminRoute from './AdminRoute';
+import AppLayout from '@components/layout/AppLayout';
+import PageNotFound from '@pages/PageNotFound';
 import AdminHomePage from "@pages/AdminHome/AdminHome"; // Importando o novo AdminHomePage
+import Vehicles from '@pages/Vehicles';
+
 
 export default function AppRoutes() {
   const isLogged = useAuth();
@@ -46,6 +48,14 @@ export default function AppRoutes() {
           element={
             <AdminRoute> {/* Envolvendo com AdminRoute se for específico para admin */}
               <AdminHomePage /> {/* Renderizando o novo AdminHomePage */}
+            </AdminRoute>
+          }
+        />
+        <Route
+          path='vehicles'
+          element={
+            <AdminRoute>
+              <Vehicles />
             </AdminRoute>
           }
         />

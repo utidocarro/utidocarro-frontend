@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.subContainer {
+  display: flex;
+  align-items: center;
+  gap: 3em;
+  margin-top: 3rem;
+}

@@ -1,4 +1,5 @@
 import { EUserType, IUser } from '@interfaces/user/user';
+import { IVehicle } from '@interfaces/vehicle/vehicle';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export interface IHttp {
@@ -43,6 +44,11 @@ export interface ApiResponseError {
   message?: string;
 }
 
+export interface IDefaultResponse {
+  message?: string;
+  error?: string;
+}
+
 // = ============================================================
 export interface ILoginRequest {
   email: string;
@@ -58,7 +64,6 @@ export interface ILoginResponse {
 export interface IAddUserRequest {
   nome: string;
   email: string;
-  senha: string;
   tipo: EUserType;
 }
 
@@ -73,6 +78,21 @@ export interface IEditUserRequest extends IAddUserRequest {
   id: number;
 }
 
-export interface IEditUserResponse extends Omit<IAddUserResponse, 'token'> {}
+export interface IEditUserResponse
+  extends Omit<IAddUserResponse, 'token' | 'senha'> {}
+
+// = ============================================================
+export interface IAddVehicleRequest extends Omit<IVehicle, 'id' | 'deletado'> {}
+
+export interface IAddVehicleResponse extends IDefaultResponse {
+  veiculo?: IVehicle;
+}
+
+// = ============================================================
+export interface IEditVehicleRequest extends Omit<IVehicle, 'deletado'> {}
+
+export interface IEditVehicleResponse extends IDefaultResponse {
+  veiculo?: IVehicle;
+}
 
 // = ============================================================

@@ -21,9 +21,6 @@ const schema = z.object({
     .string()
     .min(3, { message: 'O nome deve ter no mínimo 3 caracteres' }),
   email: z.string().email({ message: 'Digite um Email válido' }),
-  password: z
-    .string()
-    .min(6, { message: 'A senha deve ter no mínimo 6 caracteres' }),
   type: z.nativeEnum(EUserType),
 });
 
@@ -60,7 +57,6 @@ function EditUserForm({ onCloseForm, onEditUser, user }: IEditUserForm) {
         id: data.id,
         email: data.email,
         nome: data.name,
-        senha: data.password,
         tipo: data.type,
       });
 
@@ -100,14 +96,6 @@ function EditUserForm({ onCloseForm, onEditUser, user }: IEditUserForm) {
         placeholder='Digite o email'
         errorMessage={errors?.email?.message ?? ''}
         register={register('email')}
-      />
-
-      <InputWithError
-        text='Senha'
-        placeholder='Digite a senha'
-        errorMessage={errors?.password?.message ?? ''}
-        type='password'
-        register={register('password')}
       />
 
       <RadioGroup

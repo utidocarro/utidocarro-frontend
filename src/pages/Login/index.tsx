@@ -32,7 +32,7 @@ const schema = z.object({
 export interface ILoginFormFields extends z.infer<typeof schema> {}
 
 // = ============================================================
-function Login() {
+export default function Login() {
   const {
     register,
     handleSubmit,
@@ -130,5 +130,3 @@ function Login() {
     </div>
   );
 }
-
-export default Login;
