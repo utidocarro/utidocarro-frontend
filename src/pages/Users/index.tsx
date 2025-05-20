@@ -22,7 +22,6 @@ const defaultUser: IEditUserFormFields = {
   id: 0,
   name: '',
   email: '',
-  password: '',
   type: EUserType.USER,
 };
 

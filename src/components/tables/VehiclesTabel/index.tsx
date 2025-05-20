@@ -5,48 +5,44 @@ import { Column } from 'primereact/column';
 import { Tag } from 'primereact/tag';
 
 import style from './style.module.css';
-import { IUser } from '@interfaces/user/user';
-import { deleteUserById } from '@services/index';
+import { IVehicle } from '@interfaces/vehicle/vehicle';
+import { deleteVehicleById } from '@services/index';
 import { Colors } from '@styles/Colors';
 import { formatBoolean, formatDate, formatUserType } from '@utils/index';
 import { Pen, Trash } from '@assets/icons';
-import { IEditUserModalState } from '@pages/Users';
+import { IEditVehicleModalState } from '@pages/Vehicles';
 
-export interface IUsersTableProps {
-  users: Array<Omit<IUser, 'token'>>;
-  setUsers: Dispatch<SetStateAction<Omit<IUser, 'token'>[]>>;
-  onEditUser: Dispatch<SetStateAction<IEditUserModalState>>;
+export interface IVehiclesTableProps {
+  vehicles: Array<IVehicle>;
+  setVehicles: Dispatch<SetStateAction<Array<IVehicle>>>;
+  onEditVehicle: Dispatch<SetStateAction<IEditVehicleModalState>>;
 }
 
-function UsersTable({ users, setUsers, onEditUser }: IUsersTableProps) {
-  async function deleteUser(id: number) {
+function VehiclesTable({
+  vehicles,
+  setVehicles,
+  onEditVehicle,
+}: IVehiclesTableProps) {
+  async function deleteVehicle(id: number) {
     try {
-      const res = await deleteUserById(id);
+      const res = await deleteVehicleById(id);
 
       if (res.message) {
-        const updatedUsers = users.map((user) => {
-          if (user.id_usuario === id) {
+        const updatedVehicles = vehicles.map((user) => {
+          if (user.id === id) {
             return { ...user, deletado: true };
           }
           return user;
         });
-        setUsers(updatedUsers);
-        toast.success('Usuário desativado!');
+        setVehicles(updatedVehicles);
+        toast.success('Veículo desativado!');
       }
     } catch (error) {
-      console.error('Error deleting user:', error);
+      console.error('Error deleting veículo:', error);
     }
   }
 
-  const userTypeBodyTemplate = ({ tipo }: IUser) => {
-    return formatUserType(tipo);
-  };
-
-  const dateBodyTemplate = ({ data_criacao }: IUser) => {
-    return formatDate(data_criacao);
-  };
-
-  const statusBodyTemplate = ({ deletado }: IUser) => {
+  const statusBodyTemplate = ({ deletado }: IVehicle) => {
     return (
       <Tag
         className={[
@@ -58,7 +54,7 @@ function UsersTable({ users, setUsers, onEditUser }: IUsersTableProps) {
     );
   };
 
-  const actionsBodyTemplate = (user: IUser) => {
+  const actionsBodyTemplate = (vehicle: IVehicle) => {
     return (
       <div className={style.actionsContainer}>
         <Pen
@@ -67,13 +63,14 @@ function UsersTable({ users, setUsers, onEditUser }: IUsersTableProps) {
           height={22}
           style={{ cursor: 'pointer' }}
           onClick={() =>
-            onEditUser({
+            onEditVehicle({
               open: true,
-              user: {
-                id: user.id_usuario,
-                name: user.nome,
-                email: user.email,
-                type: user.tipo,
+              vehicle: {
+                id: vehicle.id_usuario,
+                name: vehicle.nome,
+                email: vehicle.email,
+                password: vehicle.senha,
+                type: vehicle.tipo,
               },
             })
           }
@@ -83,7 +80,7 @@ function UsersTable({ users, setUsers, onEditUser }: IUsersTableProps) {
           width={22}
           height={22}
           style={{ cursor: 'pointer' }}
-          onClick={async () => await deleteUser(user.id_usuario)}
+          onClick={async () => await deleteVehicle(user.id_usuario)}
         />
       </div>
     );
@@ -115,4 +112,4 @@ function UsersTable({ users, setUsers, onEditUser }: IUsersTableProps) {
   );
 }
 
-export default memo(UsersTable);
+export default memo(VehiclesTable);

@@ -1,0 +1,29 @@
+.actionsContainer {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 5px;
+}
+
+.tableContainer {
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 3rem;
+}
+
+.tag {
+  border-radius: 10px;
+  width: 50px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tagSuccess {
+  background-color: var(--green);
+}
+
+.tagError {
+  background-color: var(--error);
+}

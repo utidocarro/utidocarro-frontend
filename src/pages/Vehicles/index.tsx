@@ -3,27 +3,28 @@ import { useEffect, useState } from 'react';
 import style from './style.module.css';
 import TextButton from '@components/buttons/TextButton';
 import ModalTitle from '@components/modals/ModalTitle';
-import AddUserForm from '@components/forms/AddUserForm';
+import AddVehicleForm from '@components/forms/AddVehicleForm';
 import Title from '@components/texts/Title';
 import Subtitle from '@components/texts/Subtitle';
-import { EUserType, IUser } from '@interfaces/user/user';
-import { getUsers, getVehicles } from '@services/index';
-import UsersTable from '@components/tables/UsersTable';
-import EditUserForm, {
-  IEditUserFormFields,
-} from '@components/forms/EditUserForm';
+import { IVehicle } from '@interfaces/vehicle/vehicle';
+import { getVehicles } from '@services/index';
+import VehiclesTable from '@components/tables/VehiclesTable';
+import EditVehicleForm, {
+  IEditVehicleFormFields,
+} from '@components/forms/EditVehicleForm';
 
 export interface IEditUserModalState {
   open: boolean;
-  user: IEditUserFormFields;
+  user: IEditVehicleFormFields;
 }
 
-const defaultVehicle: IEditUserFormFields = {
+const defaultVehicle: IEditVehicleFormFields = {
   id: 0,
-  name: '',
-  email: '',
-  password: '',
-  type: EUserType.USER,
+  model: '',
+  brand: '',
+  year: '',
+  plate: '',
+  customer: 0,
 };
 
 export default function Vehicles() {
@@ -31,7 +32,7 @@ export default function Vehicles() {
     useState<boolean>(false);
   const [openEditVehicleModal, setOpenEditVehicleModal] =
     useState<IEditUserModalState>({ open: false, user: defaultVehicle });
-  const [vehicles, setVehicles] = useState<Array<Omit<IUser, 'token'>>>([]);
+  const [vehicles, setVehicles] = useState<Array<Omit<IVehicle, 'token'>>>([]);
 
   useEffect(() => {
     (async () => {
@@ -42,7 +43,7 @@ export default function Vehicles() {
     })();
   }, []);
 
-  function handleEditUser(editedUser: Omit<IUser, 'token'>) {
+  function handleEditUser(editedUser: Omit<IVehicle, 'token'>) {
     const newUsers = vehicles.map((u) => {
       if (u.id_usuario === editedUser.id_usuario) {
         return {
@@ -66,9 +67,11 @@ export default function Vehicles() {
         onClose={() => setOpenAddVehicleModal(false)}
         isVisible={openAddVehicleModal}
       >
-        <AddUserForm
+        <AddVehicleForm
           onCloseForm={() => setOpenAddVehicleModal(false)}
-          onAddNewUser={(newUser) => setVehicles([...vehicles, newUser])}
+          onAddNewVehicle={(newVehicle) =>
+            setVehicles([...vehicles, newVehicle])
+          }
         />
       </ModalTitle>
 
@@ -85,11 +88,11 @@ export default function Vehicles() {
             onClick={() => setOpenAddVehicleModal(true)}
           />
         </div>
-        {/* <UsersTable
-          users={users}
-          setUsers={setUsers}
-          onEditUser={setOpenEditUserModal}
-        /> */}
+        <VehiclesTable
+          vehicles={vehicles}
+          setVehicles={setVehicles}
+          onEditVehicle={setOpenEditVehicleModal}
+        />
       </div>
     </>
   );

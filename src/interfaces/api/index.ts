@@ -89,7 +89,7 @@ export interface IAddVehicleResponse extends IDefaultResponse {
 }
 
 // = ============================================================
-export interface IEditVehicleRequest extends IVehicle {}
+export interface IEditVehicleRequest extends Omit<IVehicle, 'deletado'> {}
 
 export interface IEditVehicleResponse extends IDefaultResponse {
   veiculo?: IVehicle;
