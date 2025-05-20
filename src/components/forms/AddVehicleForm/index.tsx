@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { memo, useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
@@ -9,8 +9,13 @@ import TextButton from '@components/buttons/TextButton';
 import PressableText from '@components/buttons/PressableText';
 import { ApiResponseError } from '@interfaces/api';
 import InputWithError from '@components/inputs/InputWithError';
-import { addVehicle } from '@services/index';
+import { addVehicle, getUsers } from '@services/index';
 import { IVehicle } from '@interfaces/vehicle/vehicle';
+import { Dropdown, DropdownProps } from 'primereact/dropdown';
+import { IUser } from '@interfaces/user/user';
+import TextError from '@components/texts/TextError';
+import { Colors } from '@styles/Colors';
+import Label from '@components/texts/Label';
 
 // = ============================================================
 const schema = z.object({
@@ -54,7 +59,21 @@ function AddVehicleForm({ onCloseForm, onAddNewVehicle }: IAddVehicleForm) {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    control,
   } = useForm<IAddVehicleFormFields>({ resolver: zodResolver(schema) });
+  const [allUsers, setAllUsers] = useState<
+    Array<Pick<IUser, 'id_usuario' | 'nome'>>
+  >([]);
+
+  // = ============================================================
+  useEffect(() => {
+    (async () => {
+      const res = await getUsers();
+      if (res) {
+        setAllUsers(res);
+      }
+    })();
+  }, []);
 
   // = ============================================================
   const onSubmit: SubmitHandler<IAddVehicleFormFields> = async (data) => {
@@ -79,6 +98,30 @@ function AddVehicleForm({ onCloseForm, onAddNewVehicle }: IAddVehicleForm) {
         'Servidor indisponível no momento!';
       toast.error(`Erro ao adicionar veículo: ${errorMessage}`);
     }
+  };
+
+  // = ============================================================
+  function userOptionTemplate(user: Pick<IUser, 'id_usuario' | 'nome'>) {
+    return (
+      <div>
+        <div>{user.nome}</div>
+      </div>
+    );
+  }
+
+  const selectedUserTemplate = (
+    user: Pick<IUser, 'id_usuario' | 'nome'>,
+    props: DropdownProps,
+  ) => {
+    if (user) {
+      return (
+        <div>
+          <div>{user.nome}</div>
+        </div>
+      );
+    }
+
+    return <span>{props.placeholder}</span>;
   };
 
   // = ============================================================
@@ -117,6 +160,30 @@ function AddVehicleForm({ onCloseForm, onAddNewVehicle }: IAddVehicleForm) {
         register={register('plate')}
         maxLength={7}
       />
+
+      <Label text={'Dono do veículo'} fontWeight={500} />
+      <Controller
+        name='customer'
+        control={control}
+        render={({ field }) => (
+          <Dropdown
+            {...field}
+            options={allUsers}
+            optionLabel='nome'
+            optionValue='id_usuario'
+            placeholder='Selecione o usuário'
+            filter
+            valueTemplate={selectedUserTemplate}
+            itemTemplate={userOptionTemplate}
+            className={style.input}
+            style={{
+              backgroundColor: Colors.lightShape,
+              color: Colors.white,
+            }}
+          />
+        )}
+      />
+      {errors.customer && <TextError text={errors.customer.message ?? ''} />}
 
       <div className={style.buttonsContainer}>
         <PressableText text='Cancelar' onClick={onCloseForm} />
