@@ -1,3 +1,4 @@
+import { useGlobalStore } from '@/storage/useGlobalStorage';
 import axios, { AxiosError } from 'axios';
 
 // = ============================================================
@@ -7,6 +8,10 @@ export const api = axios.create({
 
 // = ============================================================
 api.interceptors.request.use(async (request) => {
+  if (!request.url?.includes('login')) {
+    const token = useGlobalStore.getState().user?.token[0].token;
+    if (token) request.headers.authorization = `Bearer ${token}`;
+  }
   console.log('REQUEST: ', request);
 
   return request;
