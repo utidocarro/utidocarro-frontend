@@ -1,0 +1,42 @@
+.dropdown {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.selected {
+  padding: 5px 10px;
+  border-radius: 4px;
+  color: rgb(255, 255, 255);
+  min-width: 120px;
+  text-align: center;
+}
+
+.options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgb(6, 6, 6);
+  border: 1px solid #2e2d2d;
+  border-radius: 4px;
+  z-index: 100;
+  width: 150px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.option {
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option:hover {
+  background-color: #1c1e38b7;
+}
+
+.colorDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}

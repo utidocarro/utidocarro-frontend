@@ -1,0 +1,220 @@
+/* /home/ubuntu/frontend_project/src-front/src/pages/AdminHome/AdminHome.module.css */
+
+.container {
+    background-color: #292C2D; /* Cor de fundo principal do card, conforme imagem */
+    padding: 20px 30px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 900px;
+    margin: 40px auto; /* Adiciona margem superior e centraliza */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    color: #FFFFFF;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #3D4142; /* lightShape da paleta original, ajustado para imagem */
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.6em; /* Tamanho um pouco maior */
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.iconClipboard {
+    margin-right: 12px;
+    color: #FFC72C; /* warning - cor do ícone na imagem */
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    background-color: #3D4142; /* Cor da barra de busca na imagem */
+    padding: 10px 15px;
+    border-radius: 6px;
+    min-width: 250px;
+}
+
+.searchBar i {
+    margin-right: 10px;
+    color: #a0a0a0; /* Cor do ícone de busca */
+}
+
+.searchBar input {
+    background: none;
+    border: none;
+    outline: none;
+    color: #FFFFFF;
+    font-size: 0.95em;
+    width: 100%;
+}
+
+.searchBar input::placeholder {
+    color: #a0a0a0;
+}
+
+.osList table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.osList th,
+.osList td {
+    text-align: left;
+    padding: 15px 10px; /* Aumenta o padding */
+    border-bottom: 1px solid #3D4142;
+    vertical-align: middle;
+}
+
+.osList th {
+    font-weight: 600; /* Mais forte */
+    color: #b0b0b0; /* Cor dos cabeçalhos na imagem */
+    font-size: 0.85em;
+    text-transform: uppercase;
+}
+
+.osList tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* .osList tbody tr:hover {
+    background-color: #343839; 
+} */
+
+.userStatus {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.userStatus.active {
+    background-color: #00D25D; /* Verde da imagem */
+}
+
+.userStatus.inactive {
+    background-color: #E74C3C; /* Vermelho da imagem */
+}
+
+.status {
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+    min-width: 100px;
+    text-transform: capitalize;
+    color: #FFFFFF; /* Cor de texto padrão para status */
+}
+
+.emandamento {
+    background-color: #FFC72C; /* Amarelo da imagem */
+    color: #000000; 
+}
+
+.pendente {
+    background-color: #545B5E; /* Cinza escuro da imagem para pendente */
+    border: 1px solid #6f7679;
+}
+
+.fechado {
+    background-color: #00D25D; /* Verde da imagem */
+}
+
+.cancelado {
+    background-color: #E74C3C; /* Vermelho da imagem */
+}
+
+.pausado {
+    background-color: #0778b9; /* Marrom claro da imagem para pausado */
+    color: #f0f0f0;
+}
+
+.colIdOs {
+    font-weight: 500;
+    color: #c0c0c0;
+}
+
+.colData {
+    font-weight: 500;
+    color: #c0c0c0;
+}
+
+.loading, .error, .noData {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.1em;
+    color: #a0a0a0;
+}
+.statusText {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        margin: 20px auto;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: stretch; /* Para a barra de busca ocupar a largura */
+    }
+    .header h1 {
+        margin-bottom: 15px;
+    }
+
+    .searchBar {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .osList th,
+    .osList td {
+        padding: 12px 5px;
+        font-size: 0.85em;
+    }
+
+    .colIdOs, 
+    .osList th:nth-child(1) { 
+        /* display: none; */ /* Mantendo ID por enquanto */
+    }
+    .colData, 
+    .osList th:nth-child(5) { 
+        display: none; /* Oculta Data em telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    .osList th:nth-child(3), /* Oculta Veículo */
+    .osList td:nth-child(3) {
+        display: none;
+    }
+    .status {
+        min-width: 80px;
+        font-size: 0.75em;
+        padding: 4px 8px;
+    }
+    .header h1 {
+        font-size: 1.4em;
+    }
+    .userStatus {
+        margin-right: 6px;
+    }
+}
+
