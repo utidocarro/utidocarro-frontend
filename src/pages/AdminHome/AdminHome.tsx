@@ -105,9 +105,9 @@ const AdminHomePage: React.FC = () => {
                   <td className={styles.colIdOs}>{`OS-${String(os.id).padStart(3, '0')}`}</td>
                   <td>
                     <span 
-                      className={`${styles.userStatus} ${!os.cliente_rel.deletado ? styles.active : styles.inactive}`}>
+                      className={`${styles.userStatus} ${!os?.cliente_rel?.deletado ? styles.active : styles.inactive}`}>
                     </span>
-                    {os.cliente_rel.nome}
+                    {os?.cliente_rel?.nome}
                   </td>
                   <td>{os.veiculo_rel ? `${os.veiculo_rel.marca} ${os.veiculo_rel.modelo} ${os.veiculo_rel.ano}` : 'N/A'}</td>
                   <td>
@@ -256,10 +256,10 @@ const AdminHomePage: React.FC = () => {
                   <td>
                     <span
                       className={`${styles.userStatus} ${
-                        !os.cliente_rel.deletado ? styles.active : styles.inactive
+                        !os?.cliente_rel?.deletado ? styles.active : styles.inactive
                       }`}
                     ></span>
-                    {os.cliente_rel.nome}
+                    {os?.cliente_rel?.nome}
                   </td>
                   <td>
                     {os.veiculo_rel
@@ -348,13 +348,16 @@ const AdminHomePage: React.FC = () => {
   const fetchOrdens = async (filtro?: string) => {
     try {
       setLoading(true);
-      const response = await api.get<OrdemServico[]>('/api/ordemServico/ordens', {
-        params: { filtro: filtro || '' },
-      });
+      const response = await api.get<OrdemServico[]>(
+        '/api/ordemServico/ordens',
+        {
+          params: { filtro: filtro || '' },
+        },
+      );
       setOrdens(response.data);
       setError(null);
     } catch (err) {
-      console.error("Erro ao buscar ordens de serviço:", err);
+      console.error('Erro ao buscar ordens de serviço:', err);
       setError('Falha ao carregar ordens de serviço.');
     }
     setLoading(false);
@@ -381,7 +384,9 @@ const AdminHomePage: React.FC = () => {
   };
 
   if (loading) {
-    return <div className={styles.loading}>Carregando ordens de serviço...</div>;
+    return (
+      <div className={styles.loading}>Carregando ordens de serviço...</div>
+    );
   }
 
   if (error) {
@@ -392,14 +397,14 @@ const AdminHomePage: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>
-          <i className={`fas fa-clipboard-list ${styles.iconClipboard}`}></i>
-          {' '}Ordens de Serviço
+          <i className={`fas fa-clipboard-list ${styles.iconClipboard}`}></i>{' '}
+          Ordens de Serviço
         </h1>
         <div className={styles.searchBar}>
-          <i className="fas fa-search"></i>
+          <i className='fas fa-search'></i>
           <input
-            type="text"
-            placeholder="Buscar O.S..."
+            type='text'
+            placeholder='Buscar O.S...'
             value={textoBusca}
             onChange={(e) => setTextoBusca(e.target.value)}
             onKeyDown={(e) => {
@@ -426,12 +431,14 @@ const AdminHomePage: React.FC = () => {
             {ordens.length > 0 ? (
               ordens.map((os) => (
                 <tr key={os.id}>
-                  <td className={styles.colIdOs}>{`OS-${String(os.id).padStart(3, '0')}`}</td>
+                  <td
+                    className={styles.colIdOs}
+                  >{`OS-${String(os.id).padStart(3, '0')}`}</td>
                   <td>
-                    <span 
-                      className={`${styles.userStatus} ${!os.cliente_rel.deletado ? styles.active : styles.inactive}`}>
-                    </span>
-                    {os.cliente_rel.nome}
+                    <span
+                      className={`${styles.userStatus} ${!os?.cliente_rel?.deletado ? styles.active : styles.inactive}`}
+                    ></span>
+                    {os?.cliente_rel?.nome}
                   </td>
                   <td>
                     {os.veiculo_rel
@@ -447,16 +454,17 @@ const AdminHomePage: React.FC = () => {
                             await api.put(`/api/ordemServico/${os.id}`, {
                               status: newStatus,
                             });
-                           setOrdens((prev) =>
+                            setOrdens((prev) =>
                               prev.map((ordem) =>
-                                ordem.id === os.id ? { ...ordem, status: newStatus } : ordem
-                              )
+                                ordem.id === os.id
+                                  ? { ...ordem, status: newStatus }
+                                  : ordem,
+                              ),
                             );
                             await api.put(`/api/ordemServico/${os.id}`, {
-  status: newStatus,
-});
-fetchOrdens(textoBusca); // Refaz a busca para atualizar tudo corretamente
-                            
+                              status: newStatus,
+                            });
+                            fetchOrdens(textoBusca); // Refaz a busca para atualizar tudo corretamente
                           } catch (error) {
                             console.error('Erro ao atualizar status:', error);
                             alert('Erro ao atualizar status');
@@ -468,7 +476,9 @@ fetchOrdens(textoBusca); // Refaz a busca para atualizar tudo corretamente
                       </div>
                     </div>
                   </td>
-                  <td className={styles.colData}>{formatDate(os.dataInicio)}</td>
+                  <td className={styles.colData}>
+                    {formatDate(os.dataInicio)}
+                  </td>
                 </tr>
               ))
             ) : (
@@ -486,5 +496,3 @@ fetchOrdens(textoBusca); // Refaz a busca para atualizar tudo corretamente
 };
 
 export default AdminHomePage;
-
-
