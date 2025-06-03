@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-import { memo } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { memo, useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
@@ -10,9 +10,14 @@ import TextButton from '@components/buttons/TextButton';
 import PressableText from '@components/buttons/PressableText';
 import { ApiResponseError } from '@interfaces/api';
 import InputWithError from '@components/inputs/InputWithError';
-import { editVehicle } from '@services/index';
+import { editVehicle, getUsers } from '@services/index';
 import InputBase from '@components/inputs/InputBase';
 import { IVehicle } from '@interfaces/vehicle/vehicle';
+import Label from '@components/texts/Label';
+import { Dropdown, DropdownProps } from 'primereact/dropdown';
+import { IUser } from '@interfaces/user/user';
+import { Colors } from '@styles/Colors';
+import TextError from '@components/texts/TextError';
 
 // = ============================================================
 const schema = z.object({
@@ -62,10 +67,25 @@ function EditVehicleForm({
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    control,
   } = useForm<IEditVehicleFormFields>({
     resolver: zodResolver(schema),
     defaultValues: vehicle,
   });
+
+  const [allUsers, setAllUsers] = useState<
+    Array<Pick<IUser, 'id_usuario' | 'nome'>>
+  >([]);
+
+  // = ============================================================
+  useEffect(() => {
+    (async () => {
+      const res = await getUsers();
+      if (res) {
+        setAllUsers(res);
+      }
+    })();
+  }, []);
 
   // = ============================================================
   const onSubmit: SubmitHandler<IEditVehicleFormFields> = async (data) => {
@@ -91,6 +111,30 @@ function EditVehicleForm({
         'Servidor indisponível no momento!';
       toast.error(`Erro ao editar veículo: ${errorMessage}`);
     }
+  };
+
+  // = ============================================================
+  function userOptionTemplate(user: Pick<IUser, 'id_usuario' | 'nome'>) {
+    return (
+      <div>
+        <div>{user.nome}</div>
+      </div>
+    );
+  }
+
+  const selectedUserTemplate = (
+    user: Pick<IUser, 'id_usuario' | 'nome'>,
+    props: DropdownProps,
+  ) => {
+    if (user) {
+      return (
+        <div>
+          <div>{user.nome}</div>
+        </div>
+      );
+    }
+
+    return <span>{props.placeholder}</span>;
   };
 
   // = ============================================================
@@ -136,6 +180,30 @@ function EditVehicleForm({
         register={register('plate')}
         maxLength={7}
       />
+
+      <Label text={'Dono do veículo'} fontWeight={500} />
+      <Controller
+        name='customer'
+        control={control}
+        render={({ field }) => (
+          <Dropdown
+            {...field}
+            options={allUsers}
+            optionLabel='nome'
+            optionValue='id_usuario'
+            placeholder='Selecione o usuário'
+            filter
+            valueTemplate={selectedUserTemplate}
+            itemTemplate={userOptionTemplate}
+            className={style.input}
+            style={{
+              backgroundColor: Colors.lightShape,
+              color: Colors.white,
+            }}
+          />
+        )}
+      />
+      {errors.customer && <TextError text={errors.customer.message ?? ''} />}
 
       <div className={style.buttonsContainer}>
         <PressableText text='Cancelar' onClick={onCloseForm} />

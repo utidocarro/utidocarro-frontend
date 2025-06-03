@@ -16,3 +16,11 @@
   align-items: center;
   gap: 1rem;
 }
+
+.input {
+  padding: 20px 25px;
+  border-radius: 10px;
+  font-weight: normal;
+  font-size: 18px;
+  border: none;
+}
