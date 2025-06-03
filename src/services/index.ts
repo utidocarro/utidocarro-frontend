@@ -1,13 +1,18 @@
+/* eslint-disable no-async-promise-executor */
 import axios, { AxiosResponse } from 'axios';
 
 import {
   ApiRequest,
   httpMethods,
+  IAddServiceTypeRequest,
+  IAddServiceTypeResponse,
   IAddUserRequest,
   IAddUserResponse,
   IAddVehicleRequest,
   IAddVehicleResponse,
   IDefaultResponse,
+  IEditServiceTypeRequest,
+  IEditServiceTypeResponse,
   IEditUserRequest,
   IEditUserResponse,
   IEditVehicleRequest,
@@ -18,6 +23,7 @@ import {
 import { api } from './api';
 import { IUser } from '@interfaces/user/user';
 import { IVehicle } from '@interfaces/vehicle/vehicle';
+import { IServiceType } from '@interfaces/servicetype/servicetype';
 
 const { CancelToken } = axios;
 
@@ -135,6 +141,41 @@ export const editVehicle = async (data: IEditVehicleRequest) =>
   await request<IEditVehicleResponse>({
     api,
     endpoint: `/api/veiculos/${data.id}`,
+    method: 'put',
+    data,
+  });
+
+// = ============================================================
+
+export const addServiceType = async (data: IAddServiceTypeRequest) =>
+  await request<IAddServiceTypeResponse>({
+    api,
+    endpoint: '/api/tiposervico/cadastro',
+    method: 'post',
+    data,
+  });
+
+// = ============================================================
+export const getServiceType = async () =>
+  await request<Array<IServiceType>>({
+    api,
+    endpoint: '/api/tiposervico/todos',
+    method: 'get',
+  });
+
+// = ============================================================
+export const deleteServiceTypeById = async (id: number) =>
+  await request<IDefaultResponse>({
+    api,
+    endpoint: `/api/tiposervico/${id}`,
+    method: 'patch',
+  });
+
+// = ============================================================
+export const editServiceType = async (data: IEditServiceTypeRequest) =>
+  await request<IEditServiceTypeResponse>({
+    api,
+    endpoint: `/api/tiposervico/${data.id}`,
     method: 'put',
     data,
   });

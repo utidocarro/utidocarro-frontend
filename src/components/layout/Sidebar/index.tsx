@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from 'react-router';
 import React, { ReactNode } from 'react';
 import Button from '@components/buttons/Button';
 import useOnLogout from '@hooks/useOnLogout';
+import ServicesTypes from '@assets/icons/ServicesTypes';
 
 export default function Sidebar() {
   const isAdmin = useIsAdmin();
@@ -62,6 +63,18 @@ export default function Sidebar() {
       ),
       title: 'Veículos',
       onClick: () => navigate('/app/vehicles'),
+    },
+    {
+      route: 'servicestypes',
+      icon: (
+        <ServicesTypes
+          width={16}
+          height={16}
+          fill={location.includes('servicestypes') ? Colors.white : Colors.shape}
+        />
+      ),
+      title: 'Serviços',
+      onClick: () => navigate('/app/servicestypes'),
     },
   ];
 

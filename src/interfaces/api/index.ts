@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+import { IServiceType } from '@interfaces/servicetype/servicetype';
 import { EUserType, IUser } from '@interfaces/user/user';
 import { IVehicle } from '@interfaces/vehicle/vehicle';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
@@ -93,6 +97,23 @@ export interface IEditVehicleRequest extends Omit<IVehicle, 'deletado'> {}
 
 export interface IEditVehicleResponse extends IDefaultResponse {
   veiculo?: IVehicle;
+}
+
+// = ============================================================
+
+export interface IAddServiceTypeRequest extends Omit<IServiceType, 'id' | 'deletado'> {}
+
+export interface IAddServiceTypeResponse extends IDefaultResponse {
+  servicetype?: IServiceType;
+}
+
+// = ============================================================
+
+export interface IEditServiceTypeRequest extends Omit<IServiceType, 'deletado'> {}
+
+export interface IEditServiceTypeResponse extends IDefaultResponse {
+  tipoServico: any;
+  servicetype?: IServiceType;
 }
 
 // = ============================================================

@@ -8,6 +8,7 @@ import AdminRoute from './AdminRoute';
 import AppLayout from '@components/layout/AppLayout';
 import PageNotFound from '@pages/PageNotFound';
 import Vehicles from '@pages/Vehicles';
+import ServiceTypes from '@pages/ServiceType';
 
 export default function AppRoutes() {
   const isLogged = useAuth();
@@ -54,6 +55,14 @@ export default function AppRoutes() {
           element={
             <AdminRoute>
               <Vehicles />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path='servicestypes'
+          element={
+            <AdminRoute>
+              <ServiceTypes />
             </AdminRoute>
           }
         />
