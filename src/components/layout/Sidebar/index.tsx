@@ -63,6 +63,7 @@ export default function Sidebar() {
       ),
       title: 'Veículos',
       onClick: () => navigate('/app/vehicles'),
+      needAdmin: true,
     },
     {
       route: 'servicestypes',
@@ -70,11 +71,14 @@ export default function Sidebar() {
         <ServicesTypes
           width={16}
           height={16}
-          fill={location.includes('servicestypes') ? Colors.white : Colors.shape}
+          fill={
+            location.includes('servicestypes') ? Colors.white : Colors.shape
+          }
         />
       ),
       title: 'Serviços',
       onClick: () => navigate('/app/servicestypes'),
+      needAdmin: true,
     },
   ];
 

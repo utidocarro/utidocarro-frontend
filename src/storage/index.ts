@@ -17,6 +17,10 @@ const localStorage: StorageService = {
   removeItem: (key: string) => {
     window.localStorage.removeItem(key);
   },
+
+  removeAll: () => {
+    window.localStorage.clear();
+  },
 };
 
 export let storageService: StorageService = localStorage;

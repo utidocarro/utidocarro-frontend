@@ -1,5 +1,7 @@
 import { useGlobalStore } from '@/storage/useGlobalStorage';
+import { resetAllStore } from '@utils/index';
 import axios, { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 // = ============================================================
 export const api = axios.create({
@@ -9,7 +11,12 @@ export const api = axios.create({
 // = ============================================================
 api.interceptors.request.use(async (request) => {
   if (!request.url?.includes('login')) {
-    const token = useGlobalStore.getState().user?.token[0].token;
+    const globalState = useGlobalStore.getState();
+    const token =
+      Array.isArray(globalState.user?.token) &&
+      globalState.user?.token.length > 0
+        ? globalState.user.token[0].token
+        : null;
     if (token) request.headers.authorization = `Bearer ${token}`;
   }
   console.log('REQUEST: ', request);
@@ -26,6 +33,13 @@ api.interceptors.response.use(
   },
   (error: AxiosError) => {
     axios.CancelToken.source().cancel('Request canceled by interceptor.');
+
+    if ([error.status].includes(401)) {
+      toast.error(
+        'Sua sessão expirou. Por favor, faça login novamente para continuar.',
+      );
+      resetAllStore();
+    }
 
     console.log('RESPONSE ERROR: ', error);
     return Promise.reject(error.response?.data);

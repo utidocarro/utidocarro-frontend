@@ -68,6 +68,7 @@ export interface ILoginResponse {
 export interface IAddUserRequest {
   nome: string;
   email: string;
+  senha: string;
   tipo: EUserType;
 }
 
@@ -78,7 +79,7 @@ export interface IAddUserResponse {
 }
 
 // = ============================================================
-export interface IEditUserRequest extends IAddUserRequest {
+export interface IEditUserRequest extends Omit<IAddUserRequest, 'senha'> {
   id: number;
 }
 
@@ -101,7 +102,8 @@ export interface IEditVehicleResponse extends IDefaultResponse {
 
 // = ============================================================
 
-export interface IAddServiceTypeRequest extends Omit<IServiceType, 'id' | 'deletado'> {}
+export interface IAddServiceTypeRequest
+  extends Omit<IServiceType, 'id' | 'deletado'> {}
 
 export interface IAddServiceTypeResponse extends IDefaultResponse {
   servicetype?: IServiceType;
@@ -109,7 +111,8 @@ export interface IAddServiceTypeResponse extends IDefaultResponse {
 
 // = ============================================================
 
-export interface IEditServiceTypeRequest extends Omit<IServiceType, 'deletado'> {}
+export interface IEditServiceTypeRequest
+  extends Omit<IServiceType, 'deletado'> {}
 
 export interface IEditServiceTypeResponse extends IDefaultResponse {
   tipoServico: any;

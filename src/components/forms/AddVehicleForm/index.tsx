@@ -24,7 +24,7 @@ const schema = z.object({
     .min(2, { message: 'O modelo deve ter no mínimo 2 caracteres.' }),
   brand: z
     .string()
-    .min(3, { message: 'A marca deve ter no mínimo 3 caracteres.' }),
+    .min(2, { message: 'A marca deve ter no mínimo 2 caracteres.' }),
   year: z
     .string()
     .nonempty({ message: 'O ano do veículo é obrigatório.' })

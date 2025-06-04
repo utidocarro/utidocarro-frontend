@@ -1,3 +1,5 @@
+import { storageService } from '@/storage';
+import { useGlobalStore } from '@/storage/useGlobalStorage';
 import { EUserType } from '@interfaces/user/user';
 import dayjs from 'dayjs';
 
@@ -17,4 +19,12 @@ export function formatUserType(value: EUserType) {
   };
 
   return userTypes[value] || 'Desconhecido';
+}
+
+export function resetAllStore() {
+  const { user: initUser } = useGlobalStore.getInitialState();
+  const { setUser } = useGlobalStore.getState();
+
+  setUser(initUser);
+  storageService.removeAll();
 }
