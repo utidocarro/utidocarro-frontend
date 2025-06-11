@@ -18,11 +18,13 @@ export default function ServiceTypes() {
   const [selectedServiceType, setSelectedServiceType] =
     useState<IServiceType | null>(null);
 
+  const fetchServiceTypes = async () => {
+    const res = await getServiceType();
+    if (res) setServiceTypes(res);
+  };
+
   useEffect(() => {
-    (async () => {
-      const res = await getServiceType();
-      if (res) setServiceTypes(res);
-    })();
+    fetchServiceTypes();
   }, []);
 
   const handleOpenEditModal = (serviceType: IServiceType) => {
@@ -46,9 +48,9 @@ export default function ServiceTypes() {
       >
         <AddServiceTypeForm
           onCloseForm={() => setOpenAddModal(false)}
-          onAddNewServiceType={(newServiceType) =>
-            setServiceTypes([...serviceTypes, newServiceType])
-          }
+          onAddNewServiceType={() => {
+            fetchServiceTypes(); // <-- Atualiza a lista após adição
+          }}
         />
       </ModalTitle>
 
