@@ -7,9 +7,10 @@ import Users from '@pages/Users';
 import AdminRoute from './AdminRoute';
 import AppLayout from '@components/layout/AppLayout';
 import PageNotFound from '@pages/PageNotFound';
-import AdminHomePage from '@pages/AdminHome/AdminHome'; // Importando o novo AdminHomePage
+// import AdminHomePage from '@pages/AdminHome/AdminHome'; // Importando o novo AdminHomePage
 import Vehicles from '@pages/Vehicles';
 import ServiceTypes from '@pages/ServiceType';
+import HomeRedirect from '@routes/HomeRedirect';
 
 export default function AppRoutes() {
   const isLogged = useAuth();
@@ -44,12 +45,10 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path='home' // Esta é a rota que o Admin acessará como Home
+          path='home'
           element={
             <PrivateRoute>
-              {' '}
-              {/* Envolvendo com AdminRoute se for específico para admin */}
-              <AdminHomePage /> {/* Renderizando o novo AdminHomePage */}
+              <HomeRedirect />
             </PrivateRoute>
           }
         />
