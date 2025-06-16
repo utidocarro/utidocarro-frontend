@@ -63,7 +63,6 @@ export default function Sidebar() {
       ),
       title: 'Veículos',
       onClick: () => navigate('/app/vehicles'),
-      needAdmin: true,
     },
     {
       route: 'servicestypes',

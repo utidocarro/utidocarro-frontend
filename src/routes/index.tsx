@@ -56,9 +56,9 @@ export default function AppRoutes() {
         <Route
           path='vehicles'
           element={
-            <AdminRoute>
+            <PrivateRoute>
               <Vehicles />
-            </AdminRoute>
+            </PrivateRoute>
           }
         />
         <Route
