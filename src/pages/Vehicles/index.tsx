@@ -12,6 +12,8 @@ import VehiclesTable from '@components/tables/VehiclesTabel';
 import EditVehicleForm, {
   IEditVehicleFormFields,
 } from '@components/forms/EditVehicleForm';
+import { useGlobalStore } from '@/storage/useGlobalStorage';
+import { EUserType } from '@interfaces/user/user';
 
 export interface IEditVehicleModalState {
   open: boolean;
@@ -28,21 +30,29 @@ const defaultVehicle: IEditVehicleFormFields = {
 };
 
 export default function Vehicles() {
+  const { user } = useGlobalStore();
+  const userIsAdmin = user?.tipo === EUserType.ADMIN;
+
   const [openAddVehicleModal, setOpenAddVehicleModal] =
     useState<boolean>(false);
   const [openEditVehicleModal, setOpenEditVehicleModal] =
     useState<IEditVehicleModalState>({ open: false, vehicle: defaultVehicle });
   const [vehicles, setVehicles] = useState<Array<IVehicle>>([]);
 
+  // = ============================================================
   useEffect(() => {
     (async () => {
       const res = await getVehicles();
-      if (res) {
-        setVehicles(res);
-      }
+      if (res)
+        setVehicles(
+          userIsAdmin
+            ? res
+            : res.filter((vehicle) => vehicle.cliente === user?.id_usuario),
+        );
     })();
   }, []);
 
+  // = ============================================================
   function handleEditVehicle(editedVehicle: IVehicle) {
     const newVehicles = vehicles.map((v) => {
       console.log(v);
@@ -62,6 +72,8 @@ export default function Vehicles() {
 
     setVehicles(newVehicles);
   }
+
+  // = ============================================================
   return (
     <>
       {/* ----- Add Vehicle Modal ----- */}
@@ -84,7 +96,7 @@ export default function Vehicles() {
         onClose={() =>
           setOpenEditVehicleModal({ open: false, vehicle: defaultVehicle })
         }
-        isVisible={openEditVehicleModal.open}
+        isVisible={openEditVehicleModal.open && userIsAdmin}
       >
         <EditVehicleForm
           onCloseForm={() =>

@@ -91,6 +91,7 @@ function UsersTable({ users, setUsers, onEditUser }: IUsersTableProps) {
 
   return (
     <DataTable
+      paginatorTemplate='RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink'
       value={users}
       paginator
       rows={10}

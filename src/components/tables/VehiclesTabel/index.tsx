@@ -11,6 +11,8 @@ import { Colors } from '@styles/Colors';
 import { formatBoolean } from '@utils/index';
 import { Pen, Trash } from '@assets/icons';
 import { IEditVehicleModalState } from '@pages/Vehicles';
+import { useGlobalStore } from '@/storage/useGlobalStorage';
+import { EUserType } from '@interfaces/user/user';
 
 export interface IVehiclesTableProps {
   vehicles: Array<IVehicle>;
@@ -23,6 +25,10 @@ function VehiclesTable({
   setVehicles,
   onEditVehicle,
 }: IVehiclesTableProps) {
+  const { user } = useGlobalStore();
+  const userIsAdmin = user?.tipo === EUserType.ADMIN;
+
+  // = ============================================================
   async function deleteVehicle(id: number) {
     try {
       const res = await deleteVehicleById(id);
@@ -42,6 +48,7 @@ function VehiclesTable({
     }
   }
 
+  // = ============================================================
   const statusBodyTemplate = ({ deletado }: IVehicle) => {
     return (
       <Tag
@@ -54,6 +61,7 @@ function VehiclesTable({
     );
   };
 
+  // = ============================================================
   const actionsBodyTemplate = (vehicle: IVehicle) => {
     return (
       <div className={style.actionsContainer}>
@@ -87,8 +95,10 @@ function VehiclesTable({
     );
   };
 
+  // = ============================================================
   return (
     <DataTable
+      paginatorTemplate='RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink'
       value={vehicles}
       paginator
       rows={10}
@@ -105,7 +115,7 @@ function VehiclesTable({
       <Column field='placa' header='Placa' />
       <Column field='cliente' header='Cliente' />
       <Column field='deletado' header='Deletado' body={statusBodyTemplate} />
-      <Column header='Ações' body={actionsBodyTemplate} />
+      {userIsAdmin && <Column header='Ações' body={actionsBodyTemplate} />}
     </DataTable>
   );
 }

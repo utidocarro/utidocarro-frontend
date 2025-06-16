@@ -12,10 +12,11 @@ import InputWithError from '@components/inputs/InputWithError';
 import { addVehicle, getUsers } from '@services/index';
 import { IVehicle } from '@interfaces/vehicle/vehicle';
 import { Dropdown, DropdownProps } from 'primereact/dropdown';
-import { IUser } from '@interfaces/user/user';
+import { EUserType, IUser } from '@interfaces/user/user';
 import TextError from '@components/texts/TextError';
 import { Colors } from '@styles/Colors';
 import Label from '@components/texts/Label';
+import { useGlobalStore } from '@/storage/useGlobalStorage';
 
 // = ============================================================
 const schema = z.object({
@@ -60,7 +61,11 @@ function AddVehicleForm({ onCloseForm, onAddNewVehicle }: IAddVehicleForm) {
     formState: { errors, isSubmitting },
     reset,
     control,
+    setValue,
   } = useForm<IAddVehicleFormFields>({ resolver: zodResolver(schema) });
+  const { user } = useGlobalStore();
+  const userIsAdmin = user?.tipo === EUserType.ADMIN;
+
   const [allUsers, setAllUsers] = useState<
     Array<Pick<IUser, 'id_usuario' | 'nome'>>
   >([]);
@@ -68,9 +73,11 @@ function AddVehicleForm({ onCloseForm, onAddNewVehicle }: IAddVehicleForm) {
   // = ============================================================
   useEffect(() => {
     (async () => {
-      const res = await getUsers();
-      if (res) {
-        setAllUsers(res);
+      if (userIsAdmin) {
+        const res = await getUsers();
+        if (res) setAllUsers(res);
+      } else if (user) {
+        setValue('customer', user?.id_usuario);
       }
     })();
   }, []);
@@ -160,30 +167,35 @@ function AddVehicleForm({ onCloseForm, onAddNewVehicle }: IAddVehicleForm) {
         register={register('plate')}
         maxLength={7}
       />
-
-      <Label text={'Dono do veículo'} fontWeight={500} />
-      <Controller
-        name='customer'
-        control={control}
-        render={({ field }) => (
-          <Dropdown
-            {...field}
-            options={allUsers}
-            optionLabel='nome'
-            optionValue='id_usuario'
-            placeholder='Selecione o usuário'
-            filter
-            valueTemplate={selectedUserTemplate}
-            itemTemplate={userOptionTemplate}
-            className={style.input}
-            style={{
-              backgroundColor: Colors.lightShape,
-              color: Colors.white,
-            }}
+      {userIsAdmin && (
+        <>
+          <Label text={'Dono do veículo'} fontWeight={500} />
+          <Controller
+            name='customer'
+            control={control}
+            render={({ field }) => (
+              <Dropdown
+                {...field}
+                options={allUsers}
+                optionLabel='nome'
+                optionValue='id_usuario'
+                placeholder='Selecione o usuário'
+                filter
+                valueTemplate={selectedUserTemplate}
+                itemTemplate={userOptionTemplate}
+                className={style.input}
+                style={{
+                  backgroundColor: Colors.lightShape,
+                  color: Colors.white,
+                }}
+              />
+            )}
           />
-        )}
-      />
-      {errors.customer && <TextError text={errors.customer.message ?? ''} />}
+          {errors.customer && (
+            <TextError text={errors.customer.message ?? ''} />
+          )}
+        </>
+      )}
 
       <div className={style.buttonsContainer}>
         <PressableText text='Cancelar' onClick={onCloseForm} />
