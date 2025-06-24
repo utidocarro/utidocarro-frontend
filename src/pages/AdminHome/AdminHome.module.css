@@ -60,11 +60,13 @@
 .searchBar input::placeholder {
     color: #a0a0a0;
 }
-
+/* ID O.S*/
 .osList table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+    table-layout: fixed; 
+    
 }
 
 .osList th,
@@ -96,7 +98,7 @@
   resize: vertical;
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #767676;
   font-size: 14px;
   box-sizing: border-box;
 }
