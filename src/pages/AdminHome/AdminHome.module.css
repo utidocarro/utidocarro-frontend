@@ -101,6 +101,8 @@
   border: 1px solid #767676;
   font-size: 14px;
   box-sizing: border-box;
+  background-color: #3D4142; /* Cor de fundo para o textarea */
+  color: #FFFFFF; /* Cor do texto no textarea */
 }
 
 .textarea:focus {
@@ -183,6 +185,28 @@
   margin-top: 4px;
 }
 
+/* Estilos para o botão Salvar */
+.saveButton {
+  background-color: #007bff; /* Azul */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease-in-out;
+  white-space: nowrap; /* Garante que o texto não quebre */
+}
+
+.saveButton:hover {
+  background-color: #0056b3; /* Azul mais escuro no hover */
+}
+
+.saveButton:disabled {
+  background-color: #6c757d; /* Cinza quando desabilitado */
+  cursor: not-allowed;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     .container {
@@ -217,6 +241,11 @@
     .osList th:nth-child(5) { 
         display: none; /* Oculta Data em telas menores */
     }
+    /* Ajuste para o botão em telas menores */
+    .saveButton {
+        padding: 6px 8px;
+        font-size: 0.8em;
+    }
 }
 
 @media (max-width: 480px) {
@@ -235,5 +264,9 @@
     .userStatus {
         margin-right: 6px;
     }
+    /* Ajuste para o botão em telas muito pequenas */
+    .saveButton {
+        padding: 5px 7px;
+        font-size: 0.75em;
+    }
 }
-
