@@ -188,10 +188,6 @@
         font-size: 0.85em;
     }
 
-    .colIdOs, 
-    .osList th:nth-child(1) { 
-        /* display: none; */ /* Mantendo ID por enquanto */
-    }
     .colData, 
     .osList th:nth-child(5) { 
         display: none; /* Oculta Data em telas menores */
