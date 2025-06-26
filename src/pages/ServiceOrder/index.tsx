@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,6 +9,7 @@ import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { addLocale, locale } from 'primereact/api';
+import { MultiSelect } from 'primereact/multiselect';
 import Label from '@components/texts/Label';
 import TextButton from '@components/buttons/TextButton';
 import TextError from '@components/texts/TextError';
@@ -34,6 +36,11 @@ interface Cliente {
 interface Veiculo {
   id: number;
   modelo: string;
+}
+
+interface TipoServico {
+  id: number;
+  nome: string;
 }
 
 export default function ServiceOrders() {
@@ -64,6 +71,8 @@ export default function ServiceOrders() {
   const clienteId = watch('cliente');
   const veiculoSelecionado = watch('veiculo');
   const statusValue = watch('status');
+  const [tiposServico, setTiposServico] = useState<TipoServico[]>([]);
+  const [tiposSelecionados, setTiposSelecionados] = useState<number[]>([]);
 
   useEffect(() => {
     if (clienteId) {
@@ -135,6 +144,16 @@ export default function ServiceOrders() {
     locale('pt');
   }, []);
 
+  useEffect(() => {
+    api
+      .get('/api/tiposervico/todos')
+      .then((res) => {
+        const ativos = res.data.filter((tipo: any) => tipo.deletado === false);
+        setTiposServico(ativos);
+      })
+      .catch(() => toast.error('Erro ao carregar tipos de serviço.'));
+  }, []);
+
   const onSubmit: SubmitHandler<OrdemServicoFormData> = async (data) => {
     try {
       const payload = {
@@ -143,9 +162,12 @@ export default function ServiceOrders() {
         dataFim: data.dataFim.toISOString(),
         cliente: Number(data.cliente),
         veiculo: Number(data.veiculo),
+        detalhes: 'nenhum',
+        feedback: 'nenhum',
+        tiposServico: tiposSelecionados.map((id) => ({ id })),
       };
 
-      await api.post('/api/ordemServico/cadastro', payload);
+      await api.post('/api/ordemServico/cadastro_completo', payload);
       toast.success('Ordem de serviço cadastrada com sucesso!');
       reset();
       setClienteSelecionado(null);
@@ -178,6 +200,7 @@ export default function ServiceOrders() {
           showIcon
           locale='pt'
           className={style.input}
+          panelClassName='custom-calendar-panel'
         />
         {errors.dataInicio && (
           <TextError text={errors.dataInicio.message ?? ''} />
@@ -251,13 +274,29 @@ export default function ServiceOrders() {
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
+        <Label text='Tipos de Serviço' />
+        <MultiSelect
+          value={tiposSelecionados}
+          options={tiposServico.map((t) => ({
+            label: t.nome,
+            value: t.id,
+          }))}
+          onChange={(e) => setTiposSelecionados(e.value)}
+          placeholder='Selecione os tipos de serviço'
+          className={style.input}
+          filter
+          display='chip'
+        />
+      </div>
+
+      {/* <div style={{ marginBottom: '1rem' }}>
         <Label text='Feedback' />
         <InputTextarea
           {...register('feedback')}
           rows={3}
           className={style.input}
         />
-      </div>
+      </div> */}
 
       <div className={style.buttonsContainer}>
         <TextButton text='Cadastrar Ordem de Serviço' type='submit' />
