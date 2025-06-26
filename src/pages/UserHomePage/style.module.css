@@ -120,8 +120,7 @@
 }
 
 .emandamento {
-    background-color: #FFC72C; /* Amarelo da imagem */
-    color: #000000; 
+    background-color: #FFC72C; /* Amarelo da imagem */ 
 }
 
 .pendente {
@@ -215,5 +214,45 @@
     .userStatus {
         margin-right: 6px;
     }
+}
+
+.feedbackInput {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #777;
+  background-color: #3D4142;
+  color: white;
+  font-size: 0.9em;
+  margin-bottom: 6px;
+}
+
+.feedbackButton {
+  background-color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  color: #292c2d;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: background-color 0.3s ease;
+}
+
+.feedbackButton:hover {
+  background-color: rgb(6, 175, 6);
+}
+
+.feedbackTextarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #777;
+  background-color: #3D4142;
+  color: #fff;
+  font-size: 0.9em;
+  resize: vertical; /* Permite o usuário ajustar a altura */
+  min-height: 70px;
+  margin-bottom: 6px;
 }
 
