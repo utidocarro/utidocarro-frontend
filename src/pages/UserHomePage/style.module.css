@@ -120,24 +120,23 @@
 }
 
 .emandamento {
-    background-color: #FFC72C; /* Amarelo da imagem */ 
+    background-color: rgb(52, 152, 219); 
 }
 
 .pendente {
-    background-color: rgb(243, 156, 18); /* Cinza escuro da imagem para pendente */
+    background-color: rgb(243, 156, 18); 
 }
 
 .fechado {
-    background-color: #00D25D; /* Verde da imagem */
+    background-color: rgb(39, 174, 96); 
 }
 
 .cancelado {
-    background-color: #E74C3C; /* Vermelho da imagem */
+    background-color: rgb(192, 57, 43); 
 }
 
 .pausado {
-    background-color: #0778b9; /* Marrom claro da imagem para pausado */
-    color: #f0f0f0;
+    background-color: rgb(230, 126, 34); 
 }
 
 .colIdOs {
@@ -236,7 +235,7 @@
 }
 
 .feedbackButton:hover {
-  background-color: rgb(6, 175, 6);
+  transform: scale(1.02);
 }
 
 .feedbackTextarea {
