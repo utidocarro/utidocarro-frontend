@@ -89,7 +89,10 @@ const HomeUsuarioPage: React.FC = () => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('pt-BR');
+    const adjustedDate = new Date(
+      date.getTime() + date.getTimezoneOffset() * 60000,
+    );
+    return adjustedDate.toLocaleDateString('pt-BR');
   };
 
   if (loading) {

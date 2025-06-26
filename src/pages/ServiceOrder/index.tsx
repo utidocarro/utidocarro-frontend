@@ -170,6 +170,7 @@ export default function ServiceOrders() {
       await api.post('/api/ordemServico/cadastro_completo', payload);
       toast.success('Ordem de serviço cadastrada com sucesso!');
       reset();
+      setTiposSelecionados([]);
       setClienteSelecionado(null);
       setVeiculos([]);
     } catch {
