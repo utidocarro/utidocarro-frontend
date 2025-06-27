@@ -20,7 +20,13 @@ const OrdemServicoSchema = z.object({
   descricao: z.string().min(1, 'Descrição obrigatória'),
   dataInicio: z.date({ required_error: 'Data de início obrigatória' }),
   dataFim: z.date({ required_error: 'Data de fim obrigatória' }),
-  status: z.enum(['Em_Andamento', 'Finalizado', 'Cancelado']),
+  status: z.enum([
+    'Em_Andamento',
+    'Pendente',
+    'Pausado',
+    'Fechado',
+    'Cancelado',
+  ]),
   cliente: z.string().min(1, 'Cliente obrigatório'),
   veiculo: z.string().min(1, 'Veículo obrigatório'),
   feedback: z.string().optional(),
@@ -35,7 +41,10 @@ interface Cliente {
 
 interface Veiculo {
   id: number;
+  marca: string;
   modelo: string;
+  ano: number;
+  placa: string;
 }
 
 interface TipoServico {
@@ -64,7 +73,10 @@ export default function ServiceOrders() {
   useEffect(() => {
     api
       .get('/api/usuarios/busca_tipo', { params: { tipo: 'usuario' } })
-      .then((res) => setClientes(res.data))
+      .then((res) => {
+        const ativos = res.data.filter((tipo: any) => tipo.deletado === false);
+        setClientes(ativos);
+      })
       .catch(() => toast.error('Erro ao carregar lista de clientes.'));
   }, []);
 
@@ -80,7 +92,12 @@ export default function ServiceOrders() {
       setClienteSelecionado(id);
       api
         .get(`/api/veiculos/busca_cliente/${id}`)
-        .then((res) => setVeiculos(res.data))
+        .then((res) => {
+          const ativos = res.data.filter(
+            (tipo: any) => tipo.deletado === false,
+          );
+          setVeiculos(ativos);
+        })
         .catch(() => toast.error('Erro ao carregar veículos do cliente.'));
     } else {
       setVeiculos([]);
@@ -261,7 +278,7 @@ export default function ServiceOrders() {
         <Dropdown
           value={veiculoSelecionado}
           options={veiculos.map((v) => ({
-            label: v.modelo,
+            label: `${v.marca} - ${v.modelo} - ${v.ano} - ${v.placa}`,
             value: String(v.id),
           }))}
           onChange={(e) => setValue('veiculo', e.value)}
