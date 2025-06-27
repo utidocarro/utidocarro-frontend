@@ -5,7 +5,7 @@
     padding: 20px 30px;
     border-radius: 8px;
     width: 100%;
-    max-width: 900px;
+    max-width: 1300px;
     margin: 40px auto; /* Adiciona margem superior e centraliza */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     color: #FFFFFF;
@@ -250,4 +250,65 @@
   min-height: 70px;
   margin-bottom: 6px;
 }
+
+.dataTableCustom :global(.p-datatable) {
+  background-color: #292C2D !important;
+  border: none;
+  color: #fff;
+}
+
+.dataTableCustom :global(.p-datatable .p-datatable-thead > tr > th),
+.dataTableCustom :global(.p-datatable .p-datatable-tbody > tr > td) {
+  background-color: #292C2D !important;
+  border-bottom: 1px solid #3D4142;
+  color: #fff;
+  text-align: center;
+}
+
+.dataTableCustom :global(.p-paginator) {
+  background-color: #292C2D !important;
+  border-top: 1px solid #3D4142;
+  color: #fff;
+  padding-top: 10px;
+}
+
+.dataTableCustom :global(.p-paginator .p-paginator-page.p-highlight) {
+  background-color: #3D4142;
+  color: white;
+  border-radius: 6px;
+}
+
+/* Estiliza o seletor de quantidade de itens por página */
+.dataTableCustom :global(.p-paginator .p-dropdown) {
+  background-color: #292C2D;
+  border: 1px solid #3D4142;
+  color: #fff;
+  height: 32px;
+  font-size: 0.85em;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.dataTableCustom :global(.p-paginator .p-dropdown .p-dropdown-label) {
+  color: #fff;
+  padding: 6px 8px;
+}
+
+.dataTableCustom :global(.p-dropdown-panel) {
+  background-color: #292C2D;
+  border: 1px solid #3D4142;
+  color: #fff;
+}
+
+.dataTableCustom :global(.p-dropdown-item) {
+  background-color: #292C2D;
+  color: #fff;
+}
+
+.dataTableCustom :global(.p-dropdown-item.p-highlight) {
+  background-color: #3D4142;
+  color: #fff;
+}
+
+
 

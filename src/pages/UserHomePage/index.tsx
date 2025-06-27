@@ -4,6 +4,11 @@ import styles from './style.module.css';
 import { api } from '../../services/api';
 import { useGlobalStore } from '@/storage/useGlobalStorage';
 import { toast } from 'react-toastify';
+import ModalTiposServico from '../../components/modals/ServicesTypesModal/index';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 interface Veiculo {
   id: number;
@@ -24,13 +29,14 @@ interface OrdemServico {
   feedback?: string | null;
   deletado: boolean;
   veiculo_rel?: Veiculo | null;
-  veiculo_nome?: string; // <- Novo campo só para exibição
+  veiculo_nome?: string;
 }
 
 const HomeUsuarioPage: React.FC = () => {
   const [ordens, setOrdens] = useState<OrdemServico[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [ordemSelecionada, setOrdemSelecionada] = useState<number | null>(null);
 
   const { user } = useGlobalStore();
 
@@ -114,100 +120,115 @@ const HomeUsuarioPage: React.FC = () => {
         </h1>
       </div>
 
-      <div className={styles.osList}>
-        <table>
-          <thead>
-            <tr>
-              <th style={{ textAlign: 'center' }}>ID O.S</th>
-              <th style={{ textAlign: 'center' }}>Nome</th>
-              <th style={{ textAlign: 'center' }}>Veículo</th>
-              <th style={{ textAlign: 'center' }}>Status</th>
-              <th style={{ textAlign: 'center' }}>Data do Início do Serviço</th>
-              <th style={{ textAlign: 'center' }}>Data do Fim do Serviço</th>
-              <th style={{ textAlign: 'center' }}>Feedback</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ordens.length > 0 ? (
-              ordens.map((os) => (
-                <tr key={os.id}>
-                  <td
-                    style={{ textAlign: 'center' }}
-                    className={styles.colIdOs}
-                  >
-                    {`OS-${String(os.id).padStart(3, '0')}`}
-                  </td>
-                  <td style={{ textAlign: 'center' }}>{os.descricao}</td>
-                  <td style={{ textAlign: 'center' }}>{os.veiculo_nome}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <span
-                      className={`${styles.status} ${styles[os.status.toLowerCase().replace('_', '')]}`}
-                    >
-                      {formatStatusOS(os.status)}
-                    </span>
-                  </td>
-                  <td
-                    style={{ textAlign: 'center' }}
-                    className={styles.colData}
-                  >
-                    {formatDate(os.dataInicio)}
-                  </td>
-                  <td
-                    style={{ textAlign: 'center' }}
-                    className={styles.colData}
-                  >
-                    {formatDate(os.dataFim)}
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    <textarea
-                      className={styles.feedbackTextarea}
-                      rows={3}
-                      value={os.feedback ?? ''}
-                      onChange={(e) =>
-                        setOrdens((prev) =>
-                          prev.map((item) =>
-                            item.id === os.id
-                              ? { ...item, feedback: e.target.value }
-                              : item,
-                          ),
-                        )
-                      }
-                    />
-                    <button
-                      className={styles.feedbackButton}
-                      onClick={async () => {
-                        try {
-                          await api.put(`/api/ordemServico/${os.id}`, {
-                            feedback: os.feedback,
-                          });
-                          toast.success('Feedback salvo com sucesso!');
-                          setOrdens((prev) =>
-                            prev.map((item) =>
-                              item.id === os.id
-                                ? { ...item, feedback: os.feedback }
-                                : item,
-                            ),
-                          );
-                        } catch {
-                          toast.error('Erro ao salvar feedback!');
-                        }
-                      }}
-                    >
-                      Salvar
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7} className={styles.noData}>
-                  Nenhuma ordem de serviço encontrada.
-                </td>
-              </tr>
+      <div style={{backgroundColor: '#292C2D'}} className={styles.osList}>
+        <DataTable
+          style={{backgroundColor: '#292C2D' }}
+          value={ordens}
+          paginator
+          rows={5}
+          rowsPerPageOptions={[5, 10, 20]}
+          emptyMessage='Nenhuma ordem de serviço encontrada.'
+          className={styles.dataTableCustom}
+        >
+          <Column
+            field='id'
+            header='ID O.S'
+            body={(rowData) => `OS-${String(rowData.id).padStart(3, '0')}`}
+            style={{ textAlign: 'center', backgroundColor: '#292C2D' }}
+          />
+          <Column
+            field='descricao'
+            header='Nome'
+            style={{textAlign: 'left', backgroundColor: '#292C2D'}}
+          />
+          <Column
+            field='veiculo_nome'
+            header='Veículo'
+            style={{ textAlign: 'left', backgroundColor: '#292C2D' }}
+          />
+          <Column
+            field='status'
+            header='Status'
+            body={(rowData) => (
+              <span
+                className={`${styles.status} ${styles[rowData.status.toLowerCase().replace('_', '')]}`}
+              >
+                {formatStatusOS(rowData.status)}
+              </span>
             )}
-          </tbody>
-        </table>
+            style={{ textAlign: 'center', backgroundColor: '#292C2D' }}
+          />
+          <Column
+            field='dataInicio'
+            header='Data do Início do Serviço'
+            body={(rowData) => formatDate(rowData.dataInicio)}
+            style={{ textAlign: 'center', backgroundColor: '#292C2D' }}
+          />
+          <Column
+            field='dataFim'
+            header='Data do Fim do Serviço'
+            body={(rowData) => formatDate(rowData.dataFim)}
+            style={{ textAlign: 'center', backgroundColor: '#292C2D' }}
+          />
+          <Column
+            style={{backgroundColor: '#292C2D', textAlign: 'center'}}
+            header='Feedback'
+            body={(rowData) => (
+              <div style={{ textAlign: 'center', backgroundColor: '#292C2D' }}>
+                <textarea
+                  className={styles.feedbackTextarea}
+                  rows={3}
+                  value={rowData.feedback ?? ''}
+                  onChange={(e) =>
+                    setOrdens((prev) =>
+                      prev.map((item) =>
+                        item.id === rowData.id
+                          ? { ...item, feedback: e.target.value }
+                          : item,
+                      ),
+                    )
+                  }
+                />
+                <button
+                  className={styles.feedbackButton}
+                  onClick={async () => {
+                    try {
+                      await api.put(`/api/ordemServico/${rowData.id}`, {
+                        feedback: rowData.feedback,
+                      });
+                      toast.success('Feedback salvo com sucesso!');
+                    } catch {
+                      toast.error('Erro ao salvar feedback!');
+                    }
+                  }}
+                >
+                  Salvar
+                </button>
+              </div>
+            )}
+          />
+          <Column
+            header='Tipos de Serviço'
+            body={(rowData) => (
+              <button
+                onClick={() => setOrdemSelecionada(rowData.id)}
+                className={styles.feedbackButton}
+              >
+                Ver Serviços
+              </button>
+            )}
+            style={{ textAlign: 'center', backgroundColor: '#292C2D' }}
+          />
+        </DataTable>
       </div>
+
+      {/* Modal de Tipos de Serviço */}
+      {ordemSelecionada !== null && (
+        <ModalTiposServico
+          ordemId={ordemSelecionada}
+          onClose={() => setOrdemSelecionada(null)}
+        />
+      )}
     </div>
   );
 };
