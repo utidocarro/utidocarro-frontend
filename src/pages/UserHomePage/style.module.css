@@ -1,12 +1,12 @@
 /* /home/ubuntu/frontend_project/src-front/src/pages/AdminHome/AdminHome.module.css */
 
 .container {
-    background-color: #292C2D; /* Cor de fundo principal do card, conforme imagem */
+    background-color: #292C2D;
     padding: 20px 30px;
     border-radius: 8px;
     width: 100%;
     max-width: 1300px;
-    margin: 40px auto; /* Adiciona margem superior e centraliza */
+    margin: 40px auto; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     color: #FFFFFF;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -18,12 +18,12 @@
     align-items: center;
     margin-bottom: 25px;
     padding-bottom: 15px;
-    border-bottom: 1px solid #3D4142; /* lightShape da paleta original, ajustado para imagem */
+    border-bottom: 1px solid #3D4142; 
 }
 
 .header h1 {
     margin: 0;
-    font-size: 1.6em; /* Tamanho um pouco maior */
+    font-size: 1.6em; 
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -31,13 +31,13 @@
 
 .iconClipboard {
     margin-right: 12px;
-    color: #FFC72C; /* warning - cor do ícone na imagem */
+    color: #FFC72C; 
 }
 
 .searchBar {
     display: flex;
     align-items: center;
-    background-color: #3D4142; /* Cor da barra de busca na imagem */
+    background-color: #3D4142; 
     padding: 10px 15px;
     border-radius: 6px;
     min-width: 250px;
@@ -45,7 +45,7 @@
 
 .searchBar i {
     margin-right: 10px;
-    color: #a0a0a0; /* Cor do ícone de busca */
+    color: #a0a0a0; 
 }
 
 .searchBar input {
@@ -70,14 +70,14 @@
 .osList th,
 .osList td {
     text-align: left;
-    padding: 15px 10px; /* Aumenta o padding */
+    padding: 15px 10px; 
     border-bottom: 1px solid #3D4142;
     vertical-align: middle;
 }
 
 .osList th {
-    font-weight: 600; /* Mais forte */
-    color: #b0b0b0; /* Cor dos cabeçalhos na imagem */
+    font-weight: 600; 
+    color: #b0b0b0; 
     font-size: 0.85em;
     text-transform: uppercase;
 }
@@ -85,10 +85,6 @@
 .osList tbody tr:last-child td {
     border-bottom: none;
 }
-
-/* .osList tbody tr:hover {
-    background-color: #343839; 
-} */
 
 .userStatus {
     display: inline-block;
@@ -100,11 +96,11 @@
 }
 
 .userStatus.active {
-    background-color: #00D25D; /* Verde da imagem */
+    background-color: #00D25D; 
 }
 
 .userStatus.inactive {
-    background-color: #E74C3C; /* Vermelho da imagem */
+    background-color: #E74C3C; 
 }
 
 .status {
@@ -116,7 +112,7 @@
     text-align: center;
     min-width: 100px;
     text-transform: capitalize;
-    color: #FFFFFF; /* Cor de texto padrão para status */
+    color: #FFFFFF; 
 }
 
 .emandamento {
@@ -170,7 +166,7 @@
 
     .header {
         flex-direction: column;
-        align-items: stretch; /* Para a barra de busca ocupar a largura */
+        align-items: stretch; 
     }
     .header h1 {
         margin-bottom: 15px;
@@ -189,12 +185,12 @@
 
     .colData, 
     .osList th:nth-child(5) { 
-        display: none; /* Oculta Data em telas menores */
+        display: none; 
     }
 }
 
 @media (max-width: 480px) {
-    .osList th:nth-child(3), /* Oculta Veículo */
+    .osList th:nth-child(3), 
     .osList td:nth-child(3) {
         display: none;
     }
@@ -246,7 +242,7 @@
   background-color: #3D4142;
   color: #fff;
   font-size: 0.9em;
-  resize: vertical; /* Permite o usuário ajustar a altura */
+  resize: vertical; 
   min-height: 70px;
   margin-bottom: 6px;
 }
@@ -278,7 +274,6 @@
   border-radius: 6px;
 }
 
-/* Estiliza o seletor de quantidade de itens por página */
 .dataTableCustom :global(.p-paginator .p-dropdown) {
   background-color: #292C2D;
   border: 1px solid #3D4142;
