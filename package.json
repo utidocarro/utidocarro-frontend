@@ -1,5 +1,6 @@
 {
   "name": "utidocarro-frontend",
+  "homepage": "https://utidocarro.github.io/utidocarro-frontend/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,7 +9,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "preview": "vite preview",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.0",
@@ -17,6 +20,7 @@
     "@tanstack/react-query-persist-client": "^5.69.0",
     "axios": "^1.8.3",
     "dayjs": "^1.11.13",
+    "gh-pages": "^6.3.0",
     "motion": "^12.5.0",
     "primereact": "^10.9.5",
     "react": "^19.0.0",
