@@ -91,6 +91,8 @@ const AdminHomePage: React.FC = () => {
               ...os,
               _fetched_cliente_nome: clienteNome, // Armazena o nome buscado
               _fetched_veiculo_info: veiculoInfo, // Armazena a info do veículo buscada
+              //PARA EXIBIR A DESCRIÇÃO NO CAMPO TextArea
+              comentario: os.descricao, // Mapeia a 'descricao' do backend para 'comentario' do frontend
             };
           })
         );
@@ -146,7 +148,7 @@ const AdminHomePage: React.FC = () => {
   const handleComentarioChange = (id: number, comentario: string) => {
     setOrdens(prev => prev.map(os => os.id === id ? { ...os, comentario } : os));
     // Não precisa atualizar ordensFiltradas aqui, pois o useEffect de filtro já fará isso
-    // setOrdensFiltradas(prev => prev.map(os => os.id === id ? { ...os, comentario } : os));
+    setOrdensFiltradas(prev => prev.map(os => os.id === id ? { ...os, comentario } : os));
   };
 
   // Função para lidar com a mudança no status (ainda usa pendingStatusChanges)
@@ -165,9 +167,24 @@ const AdminHomePage: React.FC = () => {
   const handleSaveComentario = async (osId: number, comentario: string | null | undefined) => {
     try {
       // Mapeia 'comentario' do frontend para 'descricao' do backend
-      // Mantendo PATCH como discutido, pois é mais adequado para atualização parcial
+      // PUT para mudar lá direto no banco
       await api.put(`/api/ordemServico/${osId}`, { descricao: comentario }); 
       toast.success('Descrição salvo com sucesso!');
+
+      // Atualiza o estado 'ordens' com a nova descrição
+      setOrdens(prevOrdens =>
+        prevOrdens.map(os =>
+          os.id === osId ? { ...os, comentario: comentario } : os
+        )
+      );
+      // Atualiza o estado 'ordensFiltradas' com a nova descrição
+      setOrdensFiltradas(prevOrdensFiltradas =>
+        prevOrdensFiltradas.map(os =>
+          os.id === osId ? { ...os, comentario: comentario } : os
+        )
+      );
+
+
     } catch (error) {
       console.error(`Erro ao salvar comentário para OS ${osId}:`, error);
       toast.error('Erro ao salvar comentário (descrição).');
