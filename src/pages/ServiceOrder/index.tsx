@@ -21,14 +21,18 @@ const OrdemServicoSchema = z.object({
   descricao: z.string().min(1, 'Descrição obrigatória'),
   dataInicio: z.date({ required_error: 'Data de início obrigatória' }),
   dataFim: z.date({ required_error: 'Data de fim obrigatória' }),
-  status: z.enum([
-    'Em_Andamento',
-    'Pendente',
-    'Pausado',
-    'Fechado',
-    'Cancelado',
-  ]),
-  cliente: z.string().min(1, 'Cliente obrigatório'),
+  status: z.enum(
+    ['Em_Andamento', 'Pendente', 'Pausado', 'Fechado', 'Cancelado'],
+    {
+      required_error: 'Status obrigatório',
+    },
+  ),
+  cliente: z
+    .string({
+      required_error:
+        'Cliente obrigatório',
+    })
+    .min(1, 'Selecione um cliente para a ordem de serviço.'),
   veiculo: z.string().min(1, 'Veículo obrigatório'),
   tiposServico: z
     .array(z.number())
@@ -97,7 +101,7 @@ export default function ServiceOrders() {
     if (clienteId) {
       const id = Number(clienteId);
       setClienteSelecionado(id);
-      setValue('veiculo', ''); 
+      setValue('veiculo', '');
       api
         .get(`/api/veiculos/busca_cliente/${id}`)
         .then((res) => {
@@ -109,7 +113,7 @@ export default function ServiceOrders() {
         .catch(() => toast.error('Erro ao carregar veículos do cliente.'));
     } else {
       setVeiculos([]);
-      setValue('veiculo', ''); 
+      setValue('veiculo', '');
     }
   }, [clienteId]);
 
