@@ -7,7 +7,6 @@ import Users from '@pages/Users';
 import AdminRoute from './AdminRoute';
 import AppLayout from '@components/layout/AppLayout';
 import PageNotFound from '@pages/PageNotFound';
-// import AdminHomePage from '@pages/AdminHome/AdminHome'; // Importando o novo AdminHomePage
 import Vehicles from '@pages/Vehicles';
 import ServiceTypes from '@pages/ServiceType';
 import HomeRedirect from '@routes/HomeRedirect';
