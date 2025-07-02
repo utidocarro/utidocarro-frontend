@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -29,6 +30,9 @@ const OrdemServicoSchema = z.object({
   ]),
   cliente: z.string().min(1, 'Cliente obrigatório'),
   veiculo: z.string().min(1, 'Veículo obrigatório'),
+  tiposServico: z
+    .array(z.number())
+    .min(1, 'Selecione ao menos um tipo de serviço'),
   feedback: z.string().optional(),
 });
 
@@ -68,6 +72,9 @@ export default function ServiceOrders() {
     formState: { errors },
   } = useForm<OrdemServicoFormData>({
     resolver: zodResolver(OrdemServicoSchema),
+    defaultValues: {
+      tiposServico: [],
+    },
   });
 
   useEffect(() => {
@@ -90,6 +97,7 @@ export default function ServiceOrders() {
     if (clienteId) {
       const id = Number(clienteId);
       setClienteSelecionado(id);
+      setValue('veiculo', ''); 
       api
         .get(`/api/veiculos/busca_cliente/${id}`)
         .then((res) => {
@@ -101,6 +109,7 @@ export default function ServiceOrders() {
         .catch(() => toast.error('Erro ao carregar veículos do cliente.'));
     } else {
       setVeiculos([]);
+      setValue('veiculo', ''); 
     }
   }, [clienteId]);
 
@@ -299,12 +308,18 @@ export default function ServiceOrders() {
             label: t.nome,
             value: t.id,
           }))}
-          onChange={(e) => setTiposSelecionados(e.value)}
+          onChange={(e) => {
+            setTiposSelecionados(e.value);
+            setValue('tiposServico', e.value); // adiciona ao react-hook-form
+          }}
           placeholder='Selecione os tipos de serviço'
           className={style.input}
           filter
           display='chip'
         />
+        {errors.tiposServico && (
+          <TextError text={errors.tiposServico.message ?? ''} />
+        )}
       </div>
 
       {/* <div style={{ marginBottom: '1rem' }}>
