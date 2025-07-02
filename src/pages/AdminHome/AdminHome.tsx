@@ -5,7 +5,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import styles from './AdminHome.module.css';
 import { api } from '../../services/api';
 import StatusDropdown from '../../components/dropdown/statusdropdown';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface UsuarioRel {
@@ -48,15 +48,18 @@ const AdminHomePage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   // Removendo pendingChanges para comentario, pois ele terá seu próprio botão de salvar
   // Manter pendingChanges para status, se você quiser que o status ainda seja salvo com o botão geral da linha
-  const [pendingStatusChanges, setPendingStatusChanges] = useState<{ [key: number]: OrdemServico['status'] | undefined }>({});
-
+  const [pendingStatusChanges, setPendingStatusChanges] = useState<{
+    [key: number]: OrdemServico['status'] | undefined;
+  }>({});
 
   useEffect(() => {
     const fetchOrdens = async () => {
       try {
         setLoading(true);
-        const response = await api.get<OrdemServico[]>('/api/ordemServico/ordens');
-        
+        const response = await api.get<OrdemServico[]>(
+          '/api/ordemServico/ordens',
+        );
+
         // Processar cada ordem para buscar cliente e veículo se não estiverem populados
         const ordensProcessadas = await Promise.all(
           response.data.map(async (os) => {
@@ -68,10 +71,15 @@ const AdminHomePage: React.FC = () => {
             // Se cliente_rel não veio populado, buscar o nome do cliente
             if (!os.cliente_rel?.nome && os.cliente) {
               try {
-                const clienteResp = await api.get<UsuarioRel>(`/api/usuarios/${os.cliente}`);
+                const clienteResp = await api.get<UsuarioRel>(
+                  `/api/usuarios/${os.cliente}`,
+                );
                 clienteNome = clienteResp.data.nome;
               } catch (clienteErr) {
-                console.warn(`Erro ao buscar cliente ${os.cliente}:`, clienteErr);
+                console.warn(
+                  `Erro ao buscar cliente ${os.cliente}:`,
+                  clienteErr,
+                );
                 clienteNome = 'Cliente Desconhecido';
               }
             }
@@ -79,10 +87,15 @@ const AdminHomePage: React.FC = () => {
             // Se veiculo_rel não veio populado, buscar os detalhes do veículo
             if (!os.veiculo_rel && os.veiculo !== null) {
               try {
-                const veiculoResp = await api.get<VeiculoRel>(`/api/veiculos/${os.veiculo}`);
+                const veiculoResp = await api.get<VeiculoRel>(
+                  `/api/veiculos/${os.veiculo}`,
+                );
                 veiculoInfo = `${veiculoResp.data.marca} ${veiculoResp.data.modelo} ${veiculoResp.data.ano}`;
               } catch (veiculoErr) {
-                console.warn(`Erro ao buscar veículo ${os.veiculo}:`, veiculoErr);
+                console.warn(
+                  `Erro ao buscar veículo ${os.veiculo}:`,
+                  veiculoErr,
+                );
                 veiculoInfo = 'N/A';
               }
             }
@@ -94,7 +107,7 @@ const AdminHomePage: React.FC = () => {
               //PARA EXIBIR A DESCRIÇÃO NO CAMPO TextArea
               comentario: os.descricao, // Mapeia a 'descricao' do backend para 'comentario' do frontend
             };
-          })
+          }),
         );
 
         setOrdens(ordensProcessadas);
@@ -117,8 +130,17 @@ const AdminHomePage: React.FC = () => {
 
     const filtradas = ordens.filter((os) => {
       const idOS = `OS-${String(os.id).padStart(3, '0')}`;
-      const nomeCliente = (os._fetched_cliente_nome || os.cliente_rel?.nome || '').toLowerCase();
-      const veiculo = (os._fetched_veiculo_info || (os.veiculo_rel ? `${os.veiculo_rel.marca} ${os.veiculo_rel.modelo} ${os.veiculo_rel.ano}` : '')).toLowerCase();
+      const nomeCliente = (
+        os._fetched_cliente_nome ||
+        os.cliente_rel?.nome ||
+        ''
+      ).toLowerCase();
+      const veiculo = (
+        os._fetched_veiculo_info ||
+        (os.veiculo_rel
+          ? `${os.veiculo_rel.marca} ${os.veiculo_rel.modelo} ${os.veiculo_rel.ano}`
+          : '')
+      ).toLowerCase();
       const status = os.status.toLowerCase().replace('_', ' ');
 
       return (
@@ -139,52 +161,64 @@ const AdminHomePage: React.FC = () => {
 
   //Mudei a data para PT-BR
   const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  const adjustedDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-  return adjustedDate.toLocaleDateString('pt-BR');
-};
+    const date = new Date(dateString);
+    const adjustedDate = new Date(
+      date.getTime() + date.getTimezoneOffset() * 60000,
+    );
+    return adjustedDate.toLocaleDateString('pt-BR');
+  };
 
   // Função para lidar com a mudança no comentário (agora atualiza diretamente o estado 'ordens')
   const handleComentarioChange = (id: number, comentario: string) => {
-    setOrdens(prev => prev.map(os => os.id === id ? { ...os, comentario } : os));
+    setOrdens((prev) =>
+      prev.map((os) => (os.id === id ? { ...os, comentario } : os)),
+    );
     // Não precisa atualizar ordensFiltradas aqui, pois o useEffect de filtro já fará isso
-    setOrdensFiltradas(prev => prev.map(os => os.id === id ? { ...os, comentario } : os));
+    setOrdensFiltradas((prev) =>
+      prev.map((os) => (os.id === id ? { ...os, comentario } : os)),
+    );
   };
 
   // Função para lidar com a mudança no status (ainda usa pendingStatusChanges)
-  const handleStatusChange = (id: number, newStatus: OrdemServico['status']) => {
-    setPendingStatusChanges(prev => ({
+  const handleStatusChange = (
+    id: number,
+    newStatus: OrdemServico['status'],
+  ) => {
+    setPendingStatusChanges((prev) => ({
       ...prev,
-      [id]: newStatus
+      [id]: newStatus,
     }));
     // Atualiza o estado local das ordens para refletir a mudança imediatamente na UI
-    setOrdens(prev => prev.map(os => os.id === id ? { ...os, status: newStatus } : os));
+    setOrdens((prev) =>
+      prev.map((os) => (os.id === id ? { ...os, status: newStatus } : os)),
+    );
     // Não precisa atualizar ordensFiltradas aqui, pois o useEffect de filtro já fará isso
     // setOrdensFiltradas(prev => prev.map(os => os.id === id ? { ...os, status: newStatus } : os));
   };
 
   // Nova função para salvar APENAS o comentário de uma OS específica
-  const handleSaveComentario = async (osId: number, comentario: string | null | undefined) => {
+  const handleSaveComentario = async (
+    osId: number,
+    comentario: string | null | undefined,
+  ) => {
     try {
       // Mapeia 'comentario' do frontend para 'descricao' do backend
       // PUT para mudar lá direto no banco
-      await api.put(`/api/ordemServico/${osId}`, { descricao: comentario }); 
-      toast.success('Descrição salvo com sucesso!');
+      await api.put(`/api/ordemServico/${osId}`, { descricao: comentario });
+      toast.success('Descrição salva com sucesso!');
 
       // Atualiza o estado 'ordens' com a nova descrição
-      setOrdens(prevOrdens =>
-        prevOrdens.map(os =>
-          os.id === osId ? { ...os, comentario: comentario } : os
-        )
+      setOrdens((prevOrdens) =>
+        prevOrdens.map((os) =>
+          os.id === osId ? { ...os, comentario: comentario } : os,
+        ),
       );
       // Atualiza o estado 'ordensFiltradas' com a nova descrição
-      setOrdensFiltradas(prevOrdensFiltradas =>
-        prevOrdensFiltradas.map(os =>
-          os.id === osId ? { ...os, comentario: comentario } : os
-        )
+      setOrdensFiltradas((prevOrdensFiltradas) =>
+        prevOrdensFiltradas.map((os) =>
+          os.id === osId ? { ...os, comentario: comentario } : os,
+        ),
       );
-
-
     } catch (error) {
       console.error(`Erro ao salvar comentário para OS ${osId}:`, error);
       toast.error('Erro ao salvar comentário (descrição).');
@@ -200,10 +234,12 @@ const AdminHomePage: React.FC = () => {
     }
 
     try {
-      await api.patch(`/api/ordemServico/status/${osId}`, { status: newStatus });
+      await api.patch(`/api/ordemServico/status/${osId}`, {
+        status: newStatus,
+      });
       toast.success('Status atualizado com sucesso!');
       // Limpa a alteração pendente de status após o sucesso
-      setPendingStatusChanges(prev => {
+      setPendingStatusChanges((prev) => {
         const newPending = { ...prev };
         delete newPending[osId];
         return newPending;
@@ -213,7 +249,6 @@ const AdminHomePage: React.FC = () => {
       toast.error('Erro ao salvar status.');
     }
   };
-
 
   // --- Estados para Paginação ---
   const [currentPage, setCurrentPage] = useState(1);
@@ -233,20 +268,21 @@ const AdminHomePage: React.FC = () => {
 
   const goToNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(prev => prev + 1);
+      setCurrentPage((prev) => prev + 1);
     }
   };
 
   const goToPrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
+      setCurrentPage((prev) => prev - 1);
     }
   };
   // --- Fim Lógica de Paginação ---
 
-
   if (loading) {
-    return <div className={styles.loading}>Carregando ordens de serviço...</div>;
+    return (
+      <div className={styles.loading}>Carregando ordens de serviço...</div>
+    );
   }
 
   if (error) {
@@ -261,10 +297,10 @@ const AdminHomePage: React.FC = () => {
           Ordens de Serviço
         </h1>
         <div className={styles.searchBar}>
-          <i className="fas fa-search"></i>
+          <i className='fas fa-search'></i>
           <input
-            type="text"
-            placeholder="Busca..."
+            type='text'
+            placeholder='Busca...'
             value={textoBusca}
             onChange={(e) => setTextoBusca(e.target.value)}
           />
@@ -281,7 +317,7 @@ const AdminHomePage: React.FC = () => {
               <th>Status</th>
               <th>Data</th>
               <th>Descrição</th>
-              <th>Ações</th> 
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -292,7 +328,9 @@ const AdminHomePage: React.FC = () => {
                   <td>
                     <span
                       className={`${styles.userStatus} ${
-                        !os.cliente_rel?.deletado ? styles.active : styles.inactive
+                        !os.cliente_rel?.deletado
+                          ? styles.active
+                          : styles.inactive
                       }`}
                     ></span>
                     {/* Exibe o nome buscado, ou o que veio da API, ou um fallback */}
@@ -300,14 +338,17 @@ const AdminHomePage: React.FC = () => {
                   </td>
                   <td>
                     {/* Exibe a info do veículo buscada, ou o que veio da API, ou um fallback */}
-                    {os._fetched_veiculo_info || (os.veiculo_rel
-                      ? `${os.veiculo_rel.marca} ${os.veiculo_rel.modelo} ${os.veiculo_rel.ano}`
-                      : 'N/A')}
+                    {os._fetched_veiculo_info ||
+                      (os.veiculo_rel
+                        ? `${os.veiculo_rel.marca} ${os.veiculo_rel.modelo} ${os.veiculo_rel.ano}`
+                        : 'N/A')}
                   </td>
                   <td>
                     <StatusDropdown
                       currentStatus={os.status}
-                      onChange={(newStatus) => handleStatusChange(os.id, newStatus)}
+                      onChange={(newStatus) =>
+                        handleStatusChange(os.id, newStatus)
+                      }
                     />
                   </td>
                   <td>{formatDate(os.dataInicio)}</td>
@@ -317,13 +358,17 @@ const AdminHomePage: React.FC = () => {
                       <textarea
                         className={styles.textarea}
                         value={os.comentario || ''}
-                        onChange={(e) => handleComentarioChange(os.id, e.target.value)}
-                        placeholder="comentário..."
+                        onChange={(e) =>
+                          handleComentarioChange(os.id, e.target.value)
+                        }
+                        placeholder='comentário...'
                         rows={6}
                       />
                       <button
                         className={styles.saveComentarioButton} // Nova classe para estilização
-                        onClick={() => handleSaveComentario(os.id, os.comentario)}
+                        onClick={() =>
+                          handleSaveComentario(os.id, os.comentario)
+                        }
                       >
                         Salvar Descrição
                       </button>
@@ -344,7 +389,9 @@ const AdminHomePage: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={7} className={styles.noData}> {/* Colspan ajustado para 7 colunas */}
+                <td colSpan={7} className={styles.noData}>
+                  {' '}
+                  {/* Colspan ajustado para 7 colunas */}
                   Nenhuma ordem de serviço encontrada.
                 </td>
               </tr>
@@ -375,15 +422,15 @@ const AdminHomePage: React.FC = () => {
             &gt;
           </button>
           {/* Botão para ir para a última página (>>) */}
-          <button onClick={() => paginate(totalPages)} disabled={currentPage === totalPages}>
+          <button
+            onClick={() => paginate(totalPages)}
+            disabled={currentPage === totalPages}
+          >
             &gt;&gt;
           </button>
         </div>
       )}
       {/* --- Fim Controles de Paginação --- */}
-
-      {/* O ToastContainer deve estar no nível mais alto do seu componente ou no App.tsx */}
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };
