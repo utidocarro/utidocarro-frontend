@@ -3,7 +3,7 @@ import Sidebar from './Sidebar';
 
 export default function AppLayout() {
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
       <Sidebar />
       <div style={{ flex: 1 }} className='flex-1 overflow-auto'>
         <Outlet />
