@@ -310,7 +310,7 @@ export default function ServiceOrders() {
           }))}
           onChange={(e) => {
             setTiposSelecionados(e.value);
-            setValue('tiposServico', e.value); // adiciona ao react-hook-form
+            setValue('tiposServico', e.value);
           }}
           placeholder='Selecione os tipos de serviço'
           className={style.input}
