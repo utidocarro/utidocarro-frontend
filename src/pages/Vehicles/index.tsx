@@ -55,7 +55,7 @@ export default function Vehicles() {
   // = ============================================================
   function handleEditVehicle(editedVehicle: IVehicle) {
     const newVehicles = vehicles.map((v) => {
-      console.log(v);
+      // console.log(v);
       if (v.id === editedVehicle.id) {
         return {
           ...v,
