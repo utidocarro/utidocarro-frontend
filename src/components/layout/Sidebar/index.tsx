@@ -10,6 +10,7 @@ import React, { ReactNode } from 'react';
 import Button from '@components/buttons/Button';
 import useOnLogout from '@hooks/useOnLogout';
 import ServicesTypes from '@assets/icons/ServicesTypes';
+import ServicesOrders from '@assets/icons/ServicesOrders';
 
 export default function Sidebar() {
   const isAdmin = useIsAdmin();
@@ -77,6 +78,21 @@ export default function Sidebar() {
       ),
       title: 'Serviços',
       onClick: () => navigate('/app/servicestypes'),
+      needAdmin: true,
+    },
+    {
+      route: 'servicesorder',
+      icon: (
+        <ServicesOrders
+          width={16}
+          height={16}
+          fill={
+            location.includes('servicesorder') ? Colors.white : Colors.shape
+          }
+        />
+      ),
+      title: 'Ordens',
+      onClick: () => navigate('/app/servicesorders'),
       needAdmin: true,
     },
   ];

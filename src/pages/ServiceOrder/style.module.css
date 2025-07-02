@@ -1,0 +1,170 @@
+.formContainer {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background-color: rgb(41, 44, 45);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important; 
+  color: #2c3e50;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  font-size: 1.8rem;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 10rem !important; 
+}
+
+.inputContainer label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #34495e;
+}
+
+.input,
+.p-inputtext,
+.p-dropdown,
+.p-calendar,
+.p-inputtextarea {
+  width: 100% !important;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  background-color: rgb(61, 65, 66) !important;
+  color: white !important; 
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.p-dropdown-label,
+.p-inputtext::placeholder,
+.p-inputtextarea::placeholder {
+  color: #7f8c8d !important; 
+}
+
+.input:focus,
+.p-inputtext:focus,
+.p-dropdown:focus,
+.p-calendar:focus,
+.p-inputtextarea:focus {
+  border-color: #ccc;
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+  outline: none;
+}
+
+.p-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.p-button {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  background-color: #2c3e50;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.p-button:hover {
+  background-color: #1a242f;
+  transform: scale(1.02);
+}
+
+:global(.p-dropdown-panel) {
+  background-color: rgb(61, 65, 66);
+  border: 1px solid #555;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+:global(.p-dropdown-item) {
+  color: #ecf0f1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  transition: background-color 0.2s ease;
+}
+
+:global(.p-dropdown-item:hover) {
+  background-color: #2c3e50;
+  color: white;
+}
+
+:global(.p-dropdown-item.p-highlight) {
+  background-color: #2c3e50;
+  color: white;
+}
+
+:global(.p-multiselect) {
+  background-color: rgb(61, 65, 66);
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  color: white;
+}
+
+:global(.p-multiselect-label) {
+  color: white;
+}
+
+:global(.p-multiselect-panel) {
+  background-color: rgb(61, 65, 66);
+  border: 1px solid #555;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+:global(.p-multiselect-item) {
+  color: #ecf0f1;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.2s ease;
+  gap: 0.5rem;
+}
+
+:global(.p-multiselect-item:hover) {
+  background-color: #2c3e50;
+  color: white;
+}
+
+:global(.p-multiselect-token) {
+  background-color: #2c3e50;
+  color: white;
+  border-radius: 8px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+  margin: 0.15rem;
+}
+
+:global(.custom-calendar-panel) {
+  background-color: rgb(61, 65, 66);
+  color: white;
+  border-radius: 10px;
+  border: 1px solid #555;
+}
+
+:global(.p-calendar .p-inputtext) {
+  background-color: rgb(61, 65, 66) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+}
+
+

@@ -10,6 +10,7 @@ import PageNotFound from '@pages/PageNotFound';
 import Vehicles from '@pages/Vehicles';
 import ServiceTypes from '@pages/ServiceType';
 import HomeRedirect from '@routes/HomeRedirect';
+import ServiceOrders from '@pages/ServiceOrder';
 
 export default function AppRoutes() {
   const isLogged = useAuth();
@@ -64,6 +65,14 @@ export default function AppRoutes() {
           element={
             <AdminRoute>
               <ServiceTypes />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path='servicesorders'
+          element={
+            <AdminRoute>
+              <ServiceOrders />
             </AdminRoute>
           }
         />

@@ -19,7 +19,7 @@ api.interceptors.request.use(async (request) => {
         : null;
     if (token) request.headers.authorization = `Bearer ${token}`;
   }
-  console.log('REQUEST: ', request);
+  // console.log('REQUEST: ', request);
 
   return request;
 });
@@ -27,7 +27,7 @@ api.interceptors.request.use(async (request) => {
 // = ============================================================
 api.interceptors.response.use(
   async (response) => {
-    console.log('RESPONSE: ', response);
+    // console.log('RESPONSE: ', response);
 
     return response;
   },
@@ -41,7 +41,7 @@ api.interceptors.response.use(
       resetAllStore();
     }
 
-    console.log('RESPONSE ERROR: ', error);
+    // console.log('RESPONSE ERROR: ', error);
     return Promise.reject(error.response?.data);
   },
 );

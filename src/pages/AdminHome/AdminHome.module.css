@@ -5,7 +5,7 @@
     padding: 20px 30px;
     border-radius: 8px;
     width: 100%;
-    max-width: 900px;
+    max-width: 1250px;
     margin: 40px auto; /* Adiciona margem superior e centraliza */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     color: #FFFFFF;
@@ -60,11 +60,13 @@
 .searchBar input::placeholder {
     color: #a0a0a0;
 }
-
+/* ID O.S*/
 .osList table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+    table-layout: fixed; 
+    
 }
 
 .osList th,
@@ -92,13 +94,15 @@
 
 .textarea {
   width: 100%;
-  min-height: 60px;
+  min-height: 30px;
   resize: vertical;
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #767676;
   font-size: 14px;
   box-sizing: border-box;
+  background-color: #ededed; /* Cor de fundo para o textarea */
+  color: #000000; /* Cor do texto no textarea */
 }
 
 .textarea:focus {
@@ -166,7 +170,8 @@
 
 .colData {
     font-weight: 500;
-    color: #c0c0c0;
+    color: #ffffff;
+    text-align: center;
 }
 
 .loading, .error, .noData {
@@ -181,7 +186,29 @@
   margin-top: 4px;
 }
 
-/* Responsividade */
+/* Estilos para o botão Salvar */
+.saveButton {
+  background-color: #007bff; /* Azul */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease-in-out;
+  white-space: nowrap; /* Garante que o texto não quebre */
+}
+
+.saveButton:hover {
+  background-color: #0056b3; /* Azul mais escuro no hover */
+}
+
+.saveButton:disabled {
+  background-color: #6c757d; /* Cinza quando desabilitado */
+  cursor: not-allowed;
+}
+
+/* Responsividade COMENTÁRIO*/ 
 @media (max-width: 768px) {
     .container {
         padding: 15px;
@@ -215,6 +242,11 @@
     .osList th:nth-child(5) { 
         display: none; /* Oculta Data em telas menores */
     }
+    /* Ajuste para o botão em telas menores */
+    .saveButton {
+        padding: 6px 8px;
+        font-size: 0.8em;
+    }
 }
 
 @media (max-width: 480px) {
@@ -233,5 +265,78 @@
     .userStatus {
         margin-right: 6px;
     }
+    /* Ajuste para o botão em telas muito pequenas */
+    .saveButton {
+        padding: 5px 7px;
+        font-size: 0.75em;
+    }
 }
 
+.saveComentarioButton {
+  background-color: #4CAF50; /* Um verde mais suave, ou outra cor que combine com seu tema */
+  color: white;
+  border: none; /* Sem borda */
+  padding: 8px 15px; /* Aumenta o padding para um botão mais "cheio" */
+  border-radius: 5px; /* Bordas levemente arredondadas */
+  cursor: pointer;
+  font-size: 0.9em; /* Tamanho da fonte um pouco maior */
+  font-weight: bold; /* Negrito para destacar */
+  transition: background-color 0.3s ease, transform 0.1s ease; /* Transição suave para hover e click */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra sutil para profundidade */
+  margin-top: 5px; /* Um pequeno espaço acima do botão, se necessário */
+  align-items: center
+}
+
+.saveComentarioButton:hover {
+  background-color: #45a049; /* Um tom mais escuro no hover */
+  transform: translateY(-1px); /* Efeito de "levantar" no hover */
+  align-items: center;
+}
+
+.saveComentarioButton:active {
+  background-color: #3e8e41; /* Um tom ainda mais escuro no click */
+  transform: translateY(0); /* Volta à posição original no click */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Sombra menor no click */
+  align-items: center;
+}
+/*PAGINAÇÃO*/
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 0px;/* Espaçamento entre os botões */
+}
+.paginationInfo {
+  
+  color: rgb(107, 104, 104); 
+
+}
+
+.pagination button {
+  background-color: transparent;
+  color: rgb(107, 104, 104);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+   
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: transparent;
+   
+}
+
+.pagination button:disabled {
+  background-color: transparent;
+  cursor: not-allowed;
+
+}
+
+.pagination .activePage {
+  background-color: #28a745; /* Cor diferente para a página ativa */
+  font-weight: bold;
+   
+}
