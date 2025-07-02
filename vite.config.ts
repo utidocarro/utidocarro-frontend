@@ -21,5 +21,5 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  base: '/',
+  base: '/utidocarro-frontend/',
 });
