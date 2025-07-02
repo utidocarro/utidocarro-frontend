@@ -6,7 +6,7 @@ import App from '@/App';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename='/utidocarro-frontend'>
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </StrictMode>,
