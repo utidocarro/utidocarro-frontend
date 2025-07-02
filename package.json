@@ -10,7 +10,7 @@
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
-    "predeploy": "yarn build",
+    "predeploy": "npm run build && cp dist/index.html dist/404.html",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
