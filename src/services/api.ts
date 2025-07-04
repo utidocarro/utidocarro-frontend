@@ -34,7 +34,10 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     axios.CancelToken.source().cancel('Request canceled by interceptor.');
 
-    if ([error.status].includes(401)) {
+    if (
+      [error.status].includes(401) &&
+      !error.request?.responseURL.includes('login')
+    ) {
       toast.error(
         'Sua sessão expirou. Por favor, faça login novamente para continuar.',
       );

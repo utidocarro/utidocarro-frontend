@@ -6,7 +6,26 @@ import styles from './AdminHome.module.css';
 import { api } from '../../services/api';
 import StatusDropdown from '../../components/dropdown/statusdropdown';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
+// --- Novas Interfaces para os Serviços ---
+interface TipoServico {
+  id: number;
+  nome: string;
+  valor: string; // O valor vem como string do backend
+}
+
+interface Orcamento {
+  id: number;
+  OS: number;
+  valorTotal: string;
+  detalhes: string | null;
+}
+
+interface ServicosDaOS {
+  tiposServico: TipoServico[];
+  orcamento: Orcamento;
+}
+// --- Fim Novas Interfaces ---
 
 interface UsuarioRel {
   id_usuario: number;
@@ -46,11 +65,16 @@ const AdminHomePage: React.FC = () => {
   const [textoBusca, setTextoBusca] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  // Removendo pendingChanges para comentario, pois ele terá seu próprio botão de salvar
-  // Manter pendingChanges para status, se você quiser que o status ainda seja salvo com o botão geral da linha
   const [pendingStatusChanges, setPendingStatusChanges] = useState<{
     [key: number]: OrdemServico['status'] | undefined;
   }>({});
+
+  // --- Novos Estados para o Modal de Serviços ---
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOsId, setSelectedOsId] = useState<number | null>(null);
+  const [servicos, setServicos] = useState<ServicosDaOS | null>(null);
+  const [loadingServicos, setLoadingServicos] = useState(false);
+  // --- Fim Novos Estados ---
 
   useEffect(() => {
     const fetchOrdens = async () => {
@@ -60,7 +84,6 @@ const AdminHomePage: React.FC = () => {
           '/api/ordemServico/ordens',
         );
 
-        // Processar cada ordem para buscar cliente e veículo se não estiverem populados
         const ordensProcessadas = await Promise.all(
           response.data.map(async (os) => {
             let clienteNome = os.cliente_rel?.nome || '';
@@ -68,7 +91,6 @@ const AdminHomePage: React.FC = () => {
               ? `${os.veiculo_rel.marca} ${os.veiculo_rel.modelo} ${os.veiculo_rel.ano}`
               : 'N/A';
 
-            // Se cliente_rel não veio populado, buscar o nome do cliente
             if (!os.cliente_rel?.nome && os.cliente) {
               try {
                 const clienteResp = await api.get<UsuarioRel>(
@@ -84,7 +106,6 @@ const AdminHomePage: React.FC = () => {
               }
             }
 
-            // Se veiculo_rel não veio populado, buscar os detalhes do veículo
             if (!os.veiculo_rel && os.veiculo !== null) {
               try {
                 const veiculoResp = await api.get<VeiculoRel>(
@@ -102,16 +123,15 @@ const AdminHomePage: React.FC = () => {
 
             return {
               ...os,
-              _fetched_cliente_nome: clienteNome, // Armazena o nome buscado
-              _fetched_veiculo_info: veiculoInfo, // Armazena a info do veículo buscada
-              //PARA EXIBIR A DESCRIÇÃO NO CAMPO TextArea
-              comentario: os.descricao, // Mapeia a 'descricao' do backend para 'comentario' do frontend
+              _fetched_cliente_nome: clienteNome,
+              _fetched_veiculo_info: veiculoInfo,
+              comentario: os.descricao,
             };
           }),
         );
 
         setOrdens(ordensProcessadas);
-        setOrdensFiltradas(ordensProcessadas); // Inicializa ordensFiltradas aqui também
+        setOrdensFiltradas(ordensProcessadas);
         setError(null);
       } catch (err) {
         console.error('Erro ao buscar ordens de serviço:', err);
@@ -124,10 +144,8 @@ const AdminHomePage: React.FC = () => {
     fetchOrdens();
   }, []);
 
-  // useEffect para aplicar o filtro de busca
   useEffect(() => {
     const texto = textoBusca.toLowerCase();
-
     const filtradas = ordens.filter((os) => {
       const idOS = `OS-${String(os.id).padStart(3, '0')}`;
       const nomeCliente = (
@@ -142,7 +160,6 @@ const AdminHomePage: React.FC = () => {
           : '')
       ).toLowerCase();
       const status = os.status.toLowerCase().replace('_', ' ');
-
       return (
         idOS.includes(texto) ||
         nomeCliente.includes(texto) ||
@@ -150,17 +167,15 @@ const AdminHomePage: React.FC = () => {
         status.includes(texto)
       );
     });
-
     setOrdensFiltradas(filtradas);
-  }, [textoBusca, ordens]); // Depende de textoBusca e ordens
+  }, [textoBusca, ordens]);
 
-  // NOVO useEffect para resetar a página APENAS quando o texto de busca muda
   useEffect(() => {
     setCurrentPage(1);
-  }, [textoBusca]); // Depende apenas de textoBusca
+  }, [textoBusca]);
 
-  //Mudei a data para PT-BR
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return 'N/A'; // Retorna N/A se a data for nula ou indefinida
     const date = new Date(dateString);
     const adjustedDate = new Date(
       date.getTime() + date.getTimezoneOffset() * 60000,
@@ -168,56 +183,31 @@ const AdminHomePage: React.FC = () => {
     return adjustedDate.toLocaleDateString('pt-BR');
   };
 
-  // Função para lidar com a mudança no comentário (agora atualiza diretamente o estado 'ordens')
   const handleComentarioChange = (id: number, comentario: string) => {
     setOrdens((prev) =>
       prev.map((os) => (os.id === id ? { ...os, comentario } : os)),
     );
-    // Não precisa atualizar ordensFiltradas aqui, pois o useEffect de filtro já fará isso
-    setOrdensFiltradas((prev) =>
-      prev.map((os) => (os.id === id ? { ...os, comentario } : os)),
-    );
   };
 
-  // Função para lidar com a mudança no status (ainda usa pendingStatusChanges)
   const handleStatusChange = (
     id: number,
     newStatus: OrdemServico['status'],
   ) => {
-    setPendingStatusChanges((prev) => ({
-      ...prev,
-      [id]: newStatus,
-    }));
-    // Atualiza o estado local das ordens para refletir a mudança imediatamente na UI
+    setPendingStatusChanges((prev) => ({ ...prev, [id]: newStatus }));
     setOrdens((prev) =>
       prev.map((os) => (os.id === id ? { ...os, status: newStatus } : os)),
     );
-    // Não precisa atualizar ordensFiltradas aqui, pois o useEffect de filtro já fará isso
-    // setOrdensFiltradas(prev => prev.map(os => os.id === id ? { ...os, status: newStatus } : os));
   };
 
-  // Nova função para salvar APENAS o comentário de uma OS específica
   const handleSaveComentario = async (
     osId: number,
     comentario: string | null | undefined,
   ) => {
     try {
-      // Mapeia 'comentario' do frontend para 'descricao' do backend
-      // PUT para mudar lá direto no banco
       await api.put(`/api/ordemServico/${osId}`, { descricao: comentario });
       toast.success('Descrição salva com sucesso!');
-
-      // Atualiza o estado 'ordens' com a nova descrição
-      setOrdens((prevOrdens) =>
-        prevOrdens.map((os) =>
-          os.id === osId ? { ...os, comentario: comentario } : os,
-        ),
-      );
-      // Atualiza o estado 'ordensFiltradas' com a nova descrição
-      setOrdensFiltradas((prevOrdensFiltradas) =>
-        prevOrdensFiltradas.map((os) =>
-          os.id === osId ? { ...os, comentario: comentario } : os,
-        ),
+      setOrdens((prev) =>
+        prev.map((os) => (os.id === osId ? { ...os, comentario } : os)),
       );
     } catch (error) {
       console.error(`Erro ao salvar comentário para OS ${osId}:`, error);
@@ -225,20 +215,17 @@ const AdminHomePage: React.FC = () => {
     }
   };
 
-  // Função para salvar APENAS o status de uma OS específica (chamada pelo botão geral da linha)
   const handleSaveStatus = async (osId: number) => {
     const newStatus = pendingStatusChanges[osId];
     if (newStatus === undefined) {
       toast.info('Nenhuma alteração de status pendente para salvar.');
       return;
     }
-
     try {
       await api.patch(`/api/ordemServico/status/${osId}`, {
         status: newStatus,
       });
       toast.success('Status atualizado com sucesso!');
-      // Limpa a alteração pendente de status após o sucesso
       setPendingStatusChanges((prev) => {
         const newPending = { ...prev };
         delete newPending[osId];
@@ -250,44 +237,98 @@ const AdminHomePage: React.FC = () => {
     }
   };
 
-  // --- Estados para Paginação ---
+  // --- Novas Funções para o Modal ---
+  const handleVerServicosClick = async (osId: number) => {
+    setSelectedOsId(osId);
+    setIsModalOpen(true);
+    setLoadingServicos(true);
+    try {
+      // --- INÍCIO DA LÓGICA CORRETA DE BUSCA ---
+
+      // 1. Buscar as associações de serviço para a OS
+      const assocRes = await api.get<{ id_tipo_servico: number }[]>(
+        `/api/associacao/porOrdem/${osId}`,
+      );
+
+      // 2. Para cada associação, buscar os detalhes do tipo de serviço
+      const tiposCompletos: TipoServico[] = await Promise.all(
+        assocRes.data.map(async ({ id_tipo_servico }) => {
+          const tipoRes = await api.get(`/api/tiposervico/${id_tipo_servico}`);
+          return {
+            id: tipoRes.data.id,
+            nome: tipoRes.data.nome,
+            valor: String(tipoRes.data.valor ?? 0), // Converte para string para corresponder à interface
+          };
+        }),
+      );
+
+      // 3. Buscar o orçamento
+      const totalRes = await api.get(`/api/orcamentos/ordemservico/${osId}`);
+      const orcamento = totalRes.data[0]; // Pega o primeiro orçamento da lista
+
+      // 4. Montar o objeto 'ServicosDaOS' para o estado
+      if (orcamento) {
+        setServicos({
+          tiposServico: tiposCompletos,
+          orcamento: {
+            id: orcamento.id,
+            OS: orcamento.OS,
+            valorTotal: String(orcamento.valorTotal ?? 0), // Converte para string
+            detalhes: orcamento.detalhes,
+          },
+        });
+      } else {
+        // Se não houver orçamento, ainda exibe os serviços
+        setServicos({
+          tiposServico: tiposCompletos,
+          orcamento: {
+            id: 0,
+            OS: osId,
+            valorTotal: tiposCompletos
+              .reduce((acc, tipo) => acc + Number(tipo.valor), 0)
+              .toString(), // Calcula o total se não houver orçamento
+            detalhes: null,
+          },
+        });
+      }
+      // --- FIM DA LÓGICA CORRETA DE BUSCA ---
+    } catch (err) {
+      console.error(`Erro ao buscar serviços para OS ${osId}:`, err);
+      toast.error('Erro ao buscar serviços.');
+      setServicos(null); // Limpa os serviços em caso de erro
+    } finally {
+      setLoadingServicos(false);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedOsId(null);
+    setServicos(null);
+  };
+  // --- Fim Novas Funções ---
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(3); //  ajustei este valor das quantidades de linhas vai mostrar de O.S
-  // --- Fim Estados para Paginação ---
-
-  // --- Lógica de Paginação ---
+  const [itemsPerPage] = useState(3);
   const totalPages = Math.ceil(ordensFiltradas.length / itemsPerPage);
-
   const currentItems = useMemo(() => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     return ordensFiltradas.slice(indexOfFirstItem, indexOfLastItem);
   }, [currentPage, itemsPerPage, ordensFiltradas]);
-
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
-
   const goToPrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
-  // --- Fim Lógica de Paginação ---
 
-  if (loading) {
+  if (loading)
     return (
       <div className={styles.loading}>Carregando ordens de serviço...</div>
     );
-  }
-
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
-  }
+  if (error) return <div className={styles.error}>{error}</div>;
 
   return (
     <div className={styles.container}>
@@ -315,35 +356,31 @@ const AdminHomePage: React.FC = () => {
               <th>Nome</th>
               <th>Veículo</th>
               <th>Status</th>
-              <th>Data</th>
+              <th>Data do início do serviço</th>
+              <th>Data do fim do serviço</th>
+              <th>Tipo de Serviço</th>
               <th>Descrição</th>
-              <th>Ações</th>
+              <th>Salvar</th>
             </tr>
           </thead>
           <tbody>
-            {currentItems.length > 0 ? ( // Usar currentItems para renderizar
+            {currentItems.length > 0 ? (
               currentItems.map((os) => (
                 <tr key={os.id}>
-                  <td>{`OS-${String(os.id).padStart(3, '0')}`}</td>
-                  <td>
+                  <td data-label='ID O.S'>{`OS-${String(os.id).padStart(3, '0')}`}</td>
+                  <td data-label='Nome'>
                     <span
-                      className={`${styles.userStatus} ${
-                        !os.cliente_rel?.deletado
-                          ? styles.active
-                          : styles.inactive
-                      }`}
+                      className={`${styles.userStatus} ${!os.cliente_rel?.deletado ? styles.active : styles.inactive}`}
                     ></span>
-                    {/* Exibe o nome buscado, ou o que veio da API, ou um fallback */}
                     {os._fetched_cliente_nome || os.cliente_rel?.nome || 'N/A'}
                   </td>
-                  <td>
-                    {/* Exibe a info do veículo buscada, ou o que veio da API, ou um fallback */}
+                  <td data-label='Veículo'>
                     {os._fetched_veiculo_info ||
                       (os.veiculo_rel
                         ? `${os.veiculo_rel.marca} ${os.veiculo_rel.modelo} ${os.veiculo_rel.ano}`
                         : 'N/A')}
                   </td>
-                  <td>
+                  <td data-label='Status'>
                     <StatusDropdown
                       currentStatus={os.status}
                       onChange={(newStatus) =>
@@ -351,9 +388,17 @@ const AdminHomePage: React.FC = () => {
                       }
                     />
                   </td>
-                  <td>{formatDate(os.dataInicio)}</td>
-                  <td>
-                    {/* Coluna da Descrição com textarea e botão Salvar individual */}
+                  <td data-label='Data Início'>{formatDate(os.dataInicio)}</td>
+                  <td data-label='Data Fim'>{formatDate(os.dataFim)}</td>
+                  <td data-label='Tipo de Serviço'>
+                    <button
+                      className={styles.verServicosButton}
+                      onClick={() => handleVerServicosClick(os.id)}
+                    >
+                      Ver Serviços
+                    </button>
+                  </td>
+                  <td data-label='Descrição'>
                     <div className={styles.descriptionCell}>
                       <textarea
                         className={styles.textarea}
@@ -365,7 +410,7 @@ const AdminHomePage: React.FC = () => {
                         rows={6}
                       />
                       <button
-                        className={styles.saveComentarioButton} // Nova classe para estilização
+                        className={styles.saveComentarioButton}
                         onClick={() =>
                           handleSaveComentario(os.id, os.comentario)
                         }
@@ -374,12 +419,10 @@ const AdminHomePage: React.FC = () => {
                       </button>
                     </div>
                   </td>
-                  <td>
-                    {/* Botão Salvar Status (se houver alteração pendente de status) */}
+                  <td data-label='Ações'>
                     <button
                       className={styles.saveButton}
                       onClick={() => handleSaveStatus(os.id)}
-                      // Desabilita o botão se não houver alteração de status pendente para esta OS
                       disabled={pendingStatusChanges[os.id] === undefined}
                     >
                       Salvar Status
@@ -389,9 +432,7 @@ const AdminHomePage: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={7} className={styles.noData}>
-                  {' '}
-                  {/* Colspan ajustado para 7 colunas */}
+                <td colSpan={9} className={styles.noData}>
                   Nenhuma ordem de serviço encontrada.
                 </td>
               </tr>
@@ -400,28 +441,20 @@ const AdminHomePage: React.FC = () => {
         </table>
       </div>
 
-      {/* --- Controles de Paginação --- */}
-      {totalPages > 0 && ( // Mostra a paginação se houver pelo menos uma página
+      {totalPages > 0 && (
         <div className={styles.pagination}>
-          {/* Botão para ir para a primeira página (<<) */}
           <button onClick={() => paginate(1)} disabled={currentPage === 1}>
             &lt;&lt;
           </button>
-          {/* Botão para ir para a página anterior (<) */}
           <button onClick={goToPrevPage} disabled={currentPage === 1}>
             &lt;
           </button>
-
-          {/* Exibição da página atual e total de páginas */}
           <span className={styles.paginationInfo}>
             ({currentPage} of {totalPages})
           </span>
-
-          {/* Botão para ir para a próxima página (>) */}
           <button onClick={goToNextPage} disabled={currentPage === totalPages}>
             &gt;
           </button>
-          {/* Botão para ir para a última página (>>) */}
           <button
             onClick={() => paginate(totalPages)}
             disabled={currentPage === totalPages}
@@ -430,7 +463,53 @@ const AdminHomePage: React.FC = () => {
           </button>
         </div>
       )}
-      {/* --- Fim Controles de Paginação --- */}
+
+      {/* --- Modal de Serviços --- */}
+      {isModalOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            {loadingServicos ? (
+              <p>Carregando serviços...</p>
+            ) : servicos ? (
+              <>
+                <h2>Serviços da OS-{String(selectedOsId).padStart(3, '0')}</h2>
+                <ul className={styles.servicosList}>
+                  {servicos.tiposServico.map((servico) => (
+                    <li key={servico.id}>
+                      <span>{servico.nome}</span>
+                      <span>R$ {parseFloat(servico.valor).toFixed(2)}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className={styles.orcamentoTotal}>
+                  <strong>Orçamento Total:</strong>
+                  <strong>
+                    R$ {parseFloat(servicos.orcamento.valorTotal).toFixed(2)}
+                  </strong>
+                </div>
+                <button
+                  className={styles.modalCloseButton}
+                  onClick={closeModal}
+                >
+                  Fechar
+                </button>
+              </>
+            ) : (
+              <>
+                <h2>Serviços da OS-{String(selectedOsId).padStart(3, '0')}</h2>
+                <p>Nenhum serviço encontrado para esta Ordem de Serviço.</p>
+                <button
+                  className={styles.modalCloseButton}
+                  onClick={closeModal}
+                >
+                  Fechar
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      {/* --- Fim Modal --- */}
     </div>
   );
 };
