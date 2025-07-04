@@ -5,7 +5,7 @@
     padding: 20px 30px;
     border-radius: 8px;
     width: 100%;
-    max-width: 1250px;
+    max-width: 1300px;
     margin: 40px auto; /* Adiciona margem superior e centraliza */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     color: #FFFFFF;
@@ -66,12 +66,13 @@
     border-collapse: collapse;
     margin-top: 10px;
     table-layout: fixed; 
+
     
 }
 
 .osList th,
 .osList td {
-    text-align: left;
+    text-align: center;
     padding: 15px 10px; /* Aumenta o padding */
     border-bottom: 1px solid #3D4142;
     vertical-align: middle;
@@ -101,8 +102,8 @@
   border: 1px solid #767676;
   font-size: 14px;
   box-sizing: border-box;
-  background-color: #ededed; /* Cor de fundo para o textarea */
-  color: #000000; /* Cor do texto no textarea */
+  background-color: #474747; /* Cor de fundo para o textarea */
+  color: #ffffff; /* Cor do texto no textarea */
 }
 
 .textarea:focus {
@@ -138,29 +139,6 @@
     min-width: 100px;
     text-transform: capitalize;
     color: #FFFFFF; /* Cor de texto padrão para status */
-}
-
-.emandamento {
-    background-color: #FFC72C; /* Amarelo da imagem */
-    color: #000000; 
-}
-
-.pendente {
-    background-color: #545B5E; /* Cinza escuro da imagem para pendente */
-    border: 1px solid #6f7679;
-}
-
-.fechado {
-    background-color: #00D25D; /* Verde da imagem */
-}
-
-.cancelado {
-    background-color: #E74C3C; /* Vermelho da imagem */
-}
-
-.pausado {
-    background-color: #0778b9; /* Marrom claro da imagem para pausado */
-    color: #f0f0f0;
 }
 
 .colIdOs {
@@ -339,4 +317,99 @@
   background-color: #28a745; /* Cor diferente para a página ativa */
   font-weight: bold;
    
+}
+/* Estilo para o botão "Ver Serviços" */
+.verServicosButton {
+background-color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  color: #292c2d;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: background-color 0.3s ease;
+}
+
+.verServicosButton:hover {
+  background-color: #5a6268;
+}
+
+/* Estilos para o Modal */
+.modalOverlay {
+  position: fixed; /* Fica fixo na tela */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Garante que o modal fique na frente de tudo */
+}
+
+.modalContent {
+  background-color: #292C2D; /* Mesma cor de fundo do container */
+  color: #FFFFFF;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 500px; /* Largura máxima do modal */
+  text-align: center;
+}
+
+.modalContent h2 {
+  color: #FFFFFF;
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 1.5em;
+  border-bottom: 1px solid #3D4142;
+  padding-bottom: 15px;
+}
+
+.servicosList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.servicosList li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 1.1em;
+  border-bottom: 1px solid #3D4142;
+}
+
+.servicosList li:last-child {
+  border-bottom: none;
+}
+
+.orcamentoTotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2em;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px solid #FFFFFF;
+}
+
+.modalCloseButton {
+  background-color: #f8f9fa; /* Cor clara para o botão de fechar */
+  color: #212529; /* Texto escuro */
+  border: 1px solid #dee2e6;
+  padding: 10px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 30px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.modalCloseButton:hover {
+  background-color: #e2e6ea;
 }
