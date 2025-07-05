@@ -11,6 +11,7 @@ import Vehicles from '@pages/Vehicles';
 import ServiceTypes from '@pages/ServiceType';
 import HomeRedirect from '@routes/HomeRedirect';
 import ServiceOrders from '@pages/ServiceOrder';
+import PasswordRecovery from '@pages/PasswordRecovery';
 
 export default function AppRoutes() {
   const isLogged = useAuth();
@@ -27,6 +28,8 @@ export default function AppRoutes() {
       />
 
       <Route path='forgot-password' element={<ForgotPassword />} />
+
+      <Route path='password-recovery' element={<PasswordRecovery />} />
 
       <Route
         path='/app'

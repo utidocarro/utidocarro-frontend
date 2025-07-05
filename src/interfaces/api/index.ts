@@ -120,3 +120,14 @@ export interface IEditServiceTypeResponse extends IDefaultResponse {
 }
 
 // = ============================================================
+export interface IRequestPasswordResetRequest
+  extends Pick<ILoginRequest, 'email'> {}
+
+export interface IRequestPasswordResetResponse extends IDefaultResponse {}
+
+//= =================================================================================
+export interface IResetPasswordRequest extends Pick<IAddUserResponse, 'token'> {
+  password: string;
+}
+
+export interface IResetPasswordResponse extends IDefaultResponse {}

@@ -19,6 +19,10 @@ import {
   IEditVehicleResponse,
   ILoginRequest,
   ILoginResponse,
+  IRequestPasswordResetRequest,
+  IRequestPasswordResetResponse,
+  IResetPasswordRequest,
+  IResetPasswordResponse,
 } from '@interfaces/api';
 import { api } from './api';
 import { IUser } from '@interfaces/user/user';
@@ -181,3 +185,21 @@ export const editServiceType = async (data: IEditServiceTypeRequest) =>
   });
 
 // = ============================================================
+export const requestPasswordReset = async (
+  data: IRequestPasswordResetRequest,
+) =>
+  await request<IRequestPasswordResetResponse>({
+    api,
+    endpoint: '/api/auth/request-password-reset',
+    method: 'post',
+    data,
+  });
+
+//= =================================================================================
+export const resetPassword = async (data: IResetPasswordRequest) =>
+  await request<IResetPasswordResponse>({
+    api,
+    endpoint: '/api/auth/reset-password',
+    method: 'post',
+    data,
+  });

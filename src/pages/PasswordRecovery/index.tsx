@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import * as motion from 'motion/react-client';
 import { z } from 'zod';
 
@@ -13,47 +14,62 @@ import InputBase from '@components/inputs/InputBase';
 import TextError from '@components/texts/TextError';
 import TextButton from '@components/buttons/TextButton';
 import PressableText from '@components/buttons/PressableText';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import Paragraph from '@components/texts/Paragraph';
-import { requestPasswordReset } from '@services/index';
+import { resetPassword } from '@services/index';
 
 // = ============================================================
 const schema = z.object({
-  email: z.string().email({ message: 'Digite um Email válido' }),
+  password: z
+    .string()
+    .min(6, { message: 'A senha deve ter no mínimo 6 caracteres' }),
+  token: z.string(),
 });
 
-export type IForgotFormFields = z.infer<typeof schema>;
+export type IPasswordRecoveryFormFields = z.infer<typeof schema>;
 
 // = ============================================================
-export default function ForgotPassword() {
+export default function PasswordRecovery() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<IForgotFormFields>({ resolver: zodResolver(schema) });
+    setValue,
+  } = useForm<IPasswordRecoveryFormFields>({ resolver: zodResolver(schema) });
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+
+  //= =================================================================================
+  useEffect(() => {
+    if (token) setValue('token', token);
+  }, [token, setValue]);
 
   // = ============================================================
-  const onSubmit: SubmitHandler<IForgotFormFields> = async (data) => {
+  const onSubmit: SubmitHandler<IPasswordRecoveryFormFields> = async (data) => {
     try {
-      const res = await requestPasswordReset({
-        email: data.email,
+      const res = await resetPassword({
+        token: data.token,
+        password: data.password,
       });
 
       if (res) {
         toast.success(
-          `Email enviado com sucesso! Confira a caixa de entrada do seu email. ${data.email}`,
+          `Senha salva com sucesso! Você já pode acessar sua conta com a nova senha.`,
         );
         reset();
         navigate('/login');
       }
     } catch (error: ApiResponseError | unknown) {
+      console.log('Error:', error);
+
       const errorMessage =
         (error as ApiResponseError)?.error ||
+        (error as ApiResponseError)?.message ||
         'Servidor indisponível no momento!';
-      toast.error(`Erro ao enviar email: ${errorMessage}`);
+      toast.error(`Erro ao salvar senha: ${errorMessage}`);
     }
   };
 
@@ -78,26 +94,26 @@ export default function ForgotPassword() {
             onSubmit={handleSubmit(onSubmit)}
             className={style.formContainer}
           >
-            <h1 className={style.title}>Esqueci minha senha!</h1>
+            <h1 className={style.title}>Redefinir senha</h1>
             <Paragraph
               size='medium'
               align='center'
-              text='Enviaremos um email para você redefinir sua senha.'
+              text='Digite sua nova senha para redefinir o acesso à sua conta.'
             />
             <div className={style.inputContainer}>
               <InputBase
-                text='Email'
-                placeholder='Digite seu email'
-                {...register('email')}
+                text='Senha'
+                placeholder='Digite a nova senha'
+                {...register('password')}
               />
-              <TextError text={errors?.email?.message ?? ''} />
+              <TextError text={errors?.password?.message ?? ''} />
             </div>
             <PressableText
               onClick={() => navigate('/login')}
               text='Lembrei minha senha'
             />
             <TextButton
-              text={isSubmitting ? 'Enviando...' : 'Enviar email'}
+              text={isSubmitting ? 'Enviando...' : 'Salvar senha'}
               type='submit'
               disabled={isSubmitting}
             />
