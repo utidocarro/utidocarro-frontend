@@ -11,6 +11,7 @@ import Button from '@components/buttons/Button';
 import useOnLogout from '@hooks/useOnLogout';
 import ServicesTypes from '@assets/icons/ServicesTypes';
 import ServicesOrders from '@assets/icons/ServicesOrders';
+import { LOGO_UTI_DO_CARRO } from '@assets/images';
 
 export default function Sidebar() {
   const isAdmin = useIsAdmin();
@@ -128,7 +129,11 @@ export default function Sidebar() {
       className={style.container}
       style={{ backgroundColor: Colors.shape, gap: '4rem' }}
     >
-      <Paragraph text='UTI do Carro' weight='medium' size='medium' />
+      <img
+        src={LOGO_UTI_DO_CARRO}
+        style={{ width: '80%', cursor: 'pointer' }}
+        onClick={() => navigate('/app/home')}
+      />
       <div className={style.menu}>{renderItems()}</div>
       <Button cardType='transparent' onClick={handleLogout}>
         <Logout width={24} height={24} stroke={Colors.error} />
