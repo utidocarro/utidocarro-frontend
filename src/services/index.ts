@@ -99,6 +99,14 @@ export const getUsers = async () =>
   });
 
 // = ============================================================
+export const getUserById = async (id: number) =>
+  await request<Omit<IUser, 'token'>>({
+    api,
+    endpoint: `/api/usuarios/${id}`,
+    method: 'get',
+  });
+
+// = ============================================================
 export const deleteUserById = async (id: number) =>
   await request<IDefaultResponse>({
     api,

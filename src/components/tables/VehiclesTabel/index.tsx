@@ -49,7 +49,7 @@ function VehiclesTable({
   }
 
   // = ============================================================
-  const statusBodyTemplate = ({ deletado }: IVehicle) => {
+  function statusBodyTemplate({ deletado }: IVehicle) {
     return (
       <Tag
         className={[
@@ -59,10 +59,10 @@ function VehiclesTable({
         value={formatBoolean(deletado)}
       ></Tag>
     );
-  };
+  }
 
   // = ============================================================
-  const actionsBodyTemplate = (vehicle: IVehicle) => {
+  function actionsBodyTemplate(vehicle: IVehicle) {
     return (
       <div className={style.actionsContainer}>
         <Pen
@@ -93,7 +93,7 @@ function VehiclesTable({
         />
       </div>
     );
-  };
+  }
 
   // = ============================================================
   return (
@@ -113,7 +113,7 @@ function VehiclesTable({
       <Column field='marca' header='Marca' />
       <Column field='ano' header='Ano' />
       <Column field='placa' header='Placa' />
-      <Column field='cliente' header='Cliente' />
+      <Column field='cliente_nome' header='Cliente' />
       <Column field='deletado' header='Deletado' body={statusBodyTemplate} />
       {userIsAdmin && <Column header='Ações' body={actionsBodyTemplate} />}
     </DataTable>

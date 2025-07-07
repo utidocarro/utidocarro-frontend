@@ -6,4 +6,5 @@ export interface IVehicle {
   placa: string;
   cliente: number;
   deletado: boolean;
+  cliente_nome?: string;
 }

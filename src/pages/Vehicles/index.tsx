@@ -7,7 +7,7 @@ import AddVehicleForm from '@components/forms/AddVehicleForm';
 import Title from '@components/texts/Title';
 import Subtitle from '@components/texts/Subtitle';
 import { IVehicle } from '@interfaces/vehicle/vehicle';
-import { getVehicles } from '@services/index';
+import { getUserById, getVehicles } from '@services/index';
 import VehiclesTable from '@components/tables/VehiclesTabel';
 import EditVehicleForm, {
   IEditVehicleFormFields,
@@ -41,21 +41,50 @@ export default function Vehicles() {
 
   // = ============================================================
   useEffect(() => {
-    (async () => {
-      const res = await getVehicles();
-      if (res)
-        setVehicles(
-          userIsAdmin
-            ? res
-            : res.filter((vehicle) => vehicle.cliente === user?.id_usuario),
+    const fetchVehiclesWithUsers = async () => {
+      try {
+        const res = await getVehicles();
+        if (!res) return;
+
+        const vehiclesWithUsers = await Promise.all(
+          res.map(async (vehicle) => {
+            try {
+              const userResponse = await getUserById(vehicle.cliente);
+              return {
+                ...vehicle,
+                cliente_nome: userResponse.nome,
+              };
+            } catch (error) {
+              console.error(
+                `Erro ao buscar usuário ${vehicle.cliente}:`,
+                error,
+              );
+              return {
+                ...vehicle,
+                cliente_nome: 'Usuário não encontrado',
+              };
+            }
+          }),
         );
-    })();
-  }, []);
+
+        const filteredVehicles = userIsAdmin
+          ? vehiclesWithUsers
+          : vehiclesWithUsers.filter(
+              (vehicle) => vehicle.cliente === user?.id_usuario,
+            );
+
+        setVehicles(filteredVehicles);
+      } catch (error) {
+        console.error('Erro ao buscar veículos:', error);
+      }
+    };
+
+    fetchVehiclesWithUsers();
+  }, [user?.id_usuario, userIsAdmin]);
 
   // = ============================================================
   function handleEditVehicle(editedVehicle: IVehicle) {
     const newVehicles = vehicles.map((v) => {
-      // console.log(v);
       if (v.id === editedVehicle.id) {
         return {
           ...v,

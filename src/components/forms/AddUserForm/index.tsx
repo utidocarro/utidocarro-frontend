@@ -25,7 +25,7 @@ const schema = z.object({
   type: z.nativeEnum(EUserType),
 });
 
-export interface IAddUserFormFields extends z.infer<typeof schema> {}
+export type IAddUserFormFields = z.infer<typeof schema>;
 
 export interface IAddUserForm {
   onCloseForm: VoidFunction;
@@ -45,7 +45,12 @@ function AddUserForm({ onCloseForm, onAddNewUser }: IAddUserForm) {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<IAddUserFormFields>({ resolver: zodResolver(schema) });
+  } = useForm<IAddUserFormFields>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      type: EUserType.USER,
+    },
+  });
 
   // = ============================================================
   const onSubmit: SubmitHandler<IAddUserFormFields> = async (data) => {

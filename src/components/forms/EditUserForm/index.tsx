@@ -24,7 +24,7 @@ const schema = z.object({
   type: z.nativeEnum(EUserType),
 });
 
-export interface IEditUserFormFields extends z.infer<typeof schema> {}
+export type IEditUserFormFields = z.infer<typeof schema>;
 
 export interface IEditUserForm {
   onCloseForm: VoidFunction;
@@ -103,7 +103,6 @@ function EditUserForm({ onCloseForm, onEditUser, user }: IEditUserForm) {
         register={register('type')}
         name='radio'
         options={defaultOptions}
-        selectedValue={user.type}
       />
       <div className={style.buttonsContainer}>
         <PressableText text='Cancelar' onClick={onCloseForm} />
