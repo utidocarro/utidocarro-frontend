@@ -9,6 +9,7 @@ import CirclePlus from './CirclePlus';
 import Trash from './Trash';
 import Pen from './Pen';
 import Car from './Car';
+import Profile from './Profile';
 
 export {
   Eye,
@@ -22,4 +23,5 @@ export {
   Trash,
   Pen,
   Car,
+  Profile,
 };

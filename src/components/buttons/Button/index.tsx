@@ -13,7 +13,17 @@ export interface IButton
 function Button({ children, cardType, ...props }: IButton) {
   return (
     <button className={style.container} {...props}>
-      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+      <motion.div
+        whileHover={{
+          y: -2,
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.40)',
+        }}
+        whileTap={{
+          y: 0,
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+        }}
+        transition={{ duration: 0.2 }}
+      >
         <Card cardType={cardType ?? 'secondary'}>{children}</Card>
       </motion.div>
     </button>

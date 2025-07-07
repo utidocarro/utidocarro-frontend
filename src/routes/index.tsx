@@ -12,6 +12,7 @@ import ServiceTypes from '@pages/ServiceType';
 import HomeRedirect from '@routes/HomeRedirect';
 import ServiceOrders from '@pages/ServiceOrder';
 import PasswordRecovery from '@pages/PasswordRecovery';
+import Profile from '@pages/Profile';
 
 export default function AppRoutes() {
   const isLogged = useAuth();
@@ -77,6 +78,14 @@ export default function AppRoutes() {
             <AdminRoute>
               <ServiceOrders />
             </AdminRoute>
+          }
+        />
+        <Route
+          path='profile'
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
           }
         />
       </Route>

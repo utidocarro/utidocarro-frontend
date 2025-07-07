@@ -4,7 +4,7 @@ import style from './style.module.css';
 import Paragraph from '@components/texts/Paragraph';
 import { useIsAdmin } from '@hooks/useAuth';
 import { Colors } from '@styles/Colors';
-import { Logout, Users, Wrench, Car } from '@assets/icons';
+import { Logout, Users, Wrench, Car, Profile } from '@assets/icons';
 import { useLocation, useNavigate } from 'react-router';
 import React, { ReactNode } from 'react';
 import Button from '@components/buttons/Button';
@@ -95,6 +95,18 @@ export default function Sidebar() {
       title: 'Ordens',
       onClick: () => navigate('/app/servicesorders'),
       needAdmin: true,
+    },
+    {
+      route: 'profile',
+      icon: (
+        <Profile
+          width={16}
+          height={16}
+          fill={location.includes('profile') ? Colors.white : Colors.shape}
+        />
+      ),
+      title: 'Perfil',
+      onClick: () => navigate('/app/profile'),
     },
   ];
 

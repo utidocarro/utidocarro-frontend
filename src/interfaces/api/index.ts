@@ -79,7 +79,8 @@ export interface IAddUserResponse {
 }
 
 // = ============================================================
-export interface IEditUserRequest extends Omit<IAddUserRequest, 'senha'> {
+export interface IEditUserRequest
+  extends Partial<Omit<IAddUserRequest, 'senha'>> {
   id: number;
 }
 
